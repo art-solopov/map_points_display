@@ -1,0 +1,10 @@
+.layout {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.map {
+    flex: 0 0 640px;
+    height: 640px;
+}
