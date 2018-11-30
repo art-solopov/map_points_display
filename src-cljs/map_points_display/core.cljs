@@ -39,9 +39,7 @@
   (.getElementById js/document "app"))
 
 (defn -main []
-  (init-map "map")
-  (let [app (get-app)]
-    (set! (.-innerHTML app) "Map view")))
+  (init-map "map"))
 
 
 (-main)

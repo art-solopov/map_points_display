@@ -1,14 +1,19 @@
 (ns map-points-display.core
-  (:require [ring.adapter.jetty :as rj])
+  (:require [ring.adapter.jetty :as rj]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [ring.middleware.file :refer [wrap-file]]
+            [ring.middleware.reload :refer [wrap-reload]]
+            [map-points-display.routes :as routes])
   (:gen-class))
 
-(defn handler [request]
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body "Hello world!"})
+(def app
+  (-> routes/app
+      (wrap-resource "public")
+      (wrap-file "./target/public")
+      wrap-reload))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (rj/run-jetty handler {:port 9400})
+  (rj/run-jetty app {:port 9400})
   )
