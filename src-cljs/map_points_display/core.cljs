@@ -1,20 +1,19 @@
-(ns map-points-display.core)
+(ns map-points-display.core
+  (:require [map-points-display.ext.open-layers :refer [ol ol-view]]
+            [map-points-display.ext.open-layers.util :refer [from-lon-lat]]))
 
 (enable-console-print!)
 
-(def open-layers (.-ol js/window))
-
 (defn make-view [lat lon zoom]
-  (let [proj (.-proj open-layers)
-        View (.-View open-layers)
-        view-conf {:center (new (.-fromLonLat proj) (array lat lon))
+  (let [view-conf {:center (from-lon-lat lat lon)
                    :zoom zoom}]
-    (View. (clj->js view-conf))))
+    (ol-view view-conf)))
 
 (defn make-controls []
-  (let [defaults (->> open-layers .-control .-defaults)
-        MousePosition (->> open-layers .-control .-MousePosition)
-        createStringXY (->> open-layers .-coordinate .-createStringXY)
+  (let [control (.. ol -control)
+        defaults (.-defaults control)
+        MousePosition (.-MousePosition control)
+        createStringXY (.. ol -coordinate -createStringXY)
         mouse-pos-control (new MousePosition
                                (js-obj
                                 "coordinateFormat" (createStringXY 4)
@@ -25,9 +24,9 @@
   (let [mapel (.getElementById js/document el-id)]
     (set! (.-innerHTML mapel) ""))
 
-  (let [Map (.-Map open-layers)
-        Tile (->> open-layers .-layer .-Tile)
-        source-OSM (->> open-layers .-source .-OSM)
+  (let [Map (.-Map ol)
+        Tile (.. ol -layer -Tile)
+        source-OSM (.. ol -source -OSM)
         map-config {:target el-id
                     :layers (array (Tile. (js-obj "source" (source-OSM.)))) 
                     :view (make-view 11.24 43.77 10)
