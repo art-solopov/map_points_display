@@ -8,7 +8,8 @@
                  [com.bhauman/figwheel-main "0.1.9"]
                  [ring "1.6.3"]
                  [compojure "1.5.1"]
-                 [enlive "1.1.6"]]
+                 [enlive "1.1.6"]
+                 [org.clojure/data.csv "0.1.4"]]
   :main ^:skip-aot map-points-display.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
