@@ -6,3 +6,8 @@
 
 (defn from-lon-lat [lat lon]
   (new fromLonLat (array lat lon)))
+
+(def ^:private createStringXY (.. ol -coordinate -createStringXY))
+
+(defn create-string-xy [fractionDigits]
+  (createStringXY fractionDigits))
