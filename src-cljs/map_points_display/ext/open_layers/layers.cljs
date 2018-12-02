@@ -24,7 +24,13 @@
   (new Style (js-obj
               "image" (icon icon-config))))
 
-(defn vec-layer [features style]
-  (let [source (new source-Vector (js-obj "features" features))
+(defn vec-layer [style]
+  (let [source (new source-Vector)
         config {:source source :style style}]
-    (new Vector (clj->js config))))
+    {:source source :layer (new Vector (clj->js config))}))
+
+(defn add-feature [{:keys [source]} point]
+  (.addFeature source point))
+
+(defn add-features [{:keys [source]} points]
+  (.addFeatures source (apply array points)))
