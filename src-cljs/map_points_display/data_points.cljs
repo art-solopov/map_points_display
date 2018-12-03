@@ -2,7 +2,7 @@
   (:require [map-points-display.ext.open-layers.geom :refer [points]]))
 
 (defn- read-datum [el]
-  {:name (.-text el)
+  {:name (.-innerText el)
    :lat (js/Number (.. el -dataset -lat))
    :lon (js/Number (.. el -dataset -lon))
    :category (.. el -dataset -category)})

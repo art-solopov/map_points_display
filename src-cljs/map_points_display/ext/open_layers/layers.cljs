@@ -13,14 +13,13 @@
   (new Tile (js-obj "source" (source-OSM.))))
 
 (def base-icon-config {:src "/icon.png"
-                       :size (array 100 100)
-                       :scale 0.3})
+                       :scale 0.15})
 
 (defn icon [config]
   (let [icon-config (->> config (merge base-icon-config) clj->js)]
     (new Icon icon-config)))
 
-(defn layer-config [icon-config]
+(defn layer-style [icon-config]
   (new Style (js-obj
               "image" (icon icon-config))))
 
