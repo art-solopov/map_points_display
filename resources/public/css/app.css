@@ -1,10 +1,21 @@
+body {
+    font-size: 16px;
+}
+
 .layout {
     display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+
     max-width: 1200px;
     margin: 0 auto;
 }
 
+.app {
+    flex: 0 1 26rem;
+}
+
 .map {
-    flex: 0 0 640px;
-    height: 640px;
+    flex: 1 0 640px;
+    min-height: 640px;
 }

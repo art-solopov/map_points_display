@@ -6,10 +6,11 @@
   [:section.group :ul.items :> :li]
   [item]
   [:li] (html/do->
-         (html/content (:name item))
          (html/set-attr :data-lat (:lat item))
          (html/set-attr :data-lon (:lon item))
-         (html/set-attr :data-category (:type item))))
+         (html/set-attr :data-category (:type item)))
+  [:.item-name] (html/content (:name item))
+  [:.item-address] (html/content (:address item)))
 
 (html/defsnippet group "templates/index.html"
   [:section.group]
