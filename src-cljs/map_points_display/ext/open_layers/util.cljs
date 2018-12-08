@@ -5,7 +5,7 @@
 (def ^:private fromLonLat (.-fromLonLat proj))
 
 (defn from-lon-lat [lat lon]
-  (new fromLonLat (array lat lon)))
+  (new fromLonLat (array lon lat)))
 
 (def ^:private createStringXY (.. ol -coordinate -createStringXY))
 
