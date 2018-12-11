@@ -6,6 +6,9 @@
 
 (defroutes app
   (GET "/" []
-       (let [all-d (data/load-data data/default-data)
-             groups (group-by :type all-d)]
-         (views/home {:groups groups :message "Map app"}))))
+       (let [groups (data/load-data data/default-data)]
+         (views/home {:groups groups :message "Map app"})))
+  (GET "/:data-file" [data-file]
+       (let [groups (data/load-data (str data-file ".csv"))]
+         (views/home {:groups groups :message (str "Map app: " data-file)})))
+  (route/not-found "Not found"))

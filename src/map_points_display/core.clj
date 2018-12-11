@@ -7,13 +7,11 @@
   (:gen-class))
 
 (def app
-  (-> routes/app
+  (-> (wrap-reload #'routes/app)
       (wrap-resource "public")
-      (wrap-file "./target/public")
-      wrap-reload))
+      (wrap-file "./target/public")))
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (rj/run-jetty app {:port 9400})
-  )
+  (rj/run-jetty app {:port 9400}))
