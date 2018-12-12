@@ -11,4 +11,4 @@ pom.xml.asc
 .hg/
 /.rebel_readline_history
 data.csv
-data.*.csv
+data/*.csv
