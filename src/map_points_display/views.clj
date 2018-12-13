@@ -23,3 +23,14 @@
   [ctxt]
   [:#app :h1] (html/content (:message ctxt))
   [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
+
+(html/defsnippet data-files-item "templates/index.html"
+  [:ul#data_files :> :li.data-file]
+  [item]
+  [:li :> :a] (html/do->
+               (html/content (s/capitalize item))
+               (html/set-attr :href (str "/data/" item))))
+
+(html/deftemplate index-file "templates/index.html"
+  [ctxt]
+  [:ul#data_files] (html/content (map data-files-item (:files ctxt))))

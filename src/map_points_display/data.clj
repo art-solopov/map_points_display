@@ -1,5 +1,6 @@
 (ns map-points-display.data
   (:require [clojure.data.csv :as csv]
+            [clojure.string :as s]
             [clojure.java.io :as io]
             [map-points-display.utils :refer [path-join]]))
 
@@ -9,6 +10,14 @@
 
 (def default-data "data.csv")
 (def data-path "./data")
+
+(defn list-data-files []
+  (->> data-path
+       io/file
+       file-seq
+       (filter #(.isFile %))
+       (map #(.getName %))
+       (map #(s/replace % #".csv$" ""))))
 
 (defn load-data [file-name]
   (let [file-path (path-join data-path file-name)
