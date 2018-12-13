@@ -7,9 +7,9 @@
 
 (defroutes app
   (GET "/" []
-       (let [groups (data/load-data data/default-data)]
-         (views/show-file {:groups groups :message "Map app"})))
-  (GET "/:data-file" [data-file]
+       (let [files (data/list-data-files)]
+         (views/index-file {:files files})))
+  (GET "/data/:data-file" [data-file]
        (let [groups (data/load-data (str data-file ".csv"))]
          (views/show-file {:groups groups :message (str "Map app: " data-file)})))
   (GET "/templates/:filename" [filename]
