@@ -1,5 +1,6 @@
 (ns map-points-display.routes
-  (:require [compojure.core :refer :all]
+  (:require [clojure.string :as s]
+            [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.util.response :refer [resource-response]]
             [map-points-display.views :as views]
@@ -11,7 +12,7 @@
          (views/index-file {:files files})))
   (GET "/data/:data-file" [data-file]
        (let [groups (data/load-data (str data-file ".csv"))]
-         (views/show-file {:groups groups :message (str "Map app: " data-file)})))
+         (views/show-file {:groups groups :message (s/capitalize data-file)})))
   (GET "/templates/:filename" [filename]
        (resource-response filename {:root "templates"}))
   (route/not-found "Not found"))
