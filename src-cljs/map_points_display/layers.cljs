@@ -5,7 +5,8 @@
 
 (def layer-colors {"museum" "#8affff"
                     "transport" "#aaff7f"
-                    "accomodation" "#e29cff"})
+                   "accomodation" "#e29cff"
+                   "sight" "#419eee"})
 
 (defn- make-layer [color]
   (oll/vec-layer (oll/layer-style {:color color})))
