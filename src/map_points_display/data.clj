@@ -17,6 +17,7 @@
        file-seq
        (filter #(.isFile %))
        (map #(.getName %))
+       (filter #(re-matches #"^[\w_-]+\.csv$" %))
        (map #(s/replace % #".csv$" ""))))
 
 (defn load-data [file-name]

@@ -3,7 +3,7 @@
             [map-points-display.ext.open-layers.control :as control]
             [map-points-display.layers :as layers]
             [map-points-display.data-points :as dp]
-            [map-points-display.elements :refer [on-el-mouse-enter on-el-mouse-leave]]
+            [map-points-display.elements :refer [mouse-event-processor]]
             [map-points-display.ext.open-layers.util :refer [from-lon-lat]]))
 
 (enable-console-print!)
@@ -36,9 +36,10 @@
     (set! (.. el -dataset -id) uuid)))
 
 (defn- add-event-listeners [data-points]
-  (doseq [{:keys [el point data]} data-points]
-    (.addEventListener el "mouseenter" (on-el-mouse-enter point (:category data)))
-    (.addEventListener el "mouseleave" (on-el-mouse-leave point (:category data)))))
+  (let [ev-proc (mouse-event-processor data-points)]
+    (doseq [{:keys [el]} data-points]
+      (.addEventListener el "mouseenter" ev-proc)
+      (.addEventListener el "mouseleave" ev-proc))))
 
 (defn get-app []
   (.getElementById js/document "app"))
