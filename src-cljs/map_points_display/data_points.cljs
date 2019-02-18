@@ -1,5 +1,4 @@
-(ns map-points-display.data-points
-  (:require [map-points-display.ext.open-layers.geom :refer [points]]))
+(ns map-points-display.data-points)
 
 (defn- read-datum [el]
   {:name (-> el (.querySelector ".item-name") .-innerText)
@@ -16,7 +15,7 @@
 (defn read-data []
   (let [els (get-els)
         el-data (map read-datum els)
-        el-pts (points el-data)]
+        el-pts (repeat nil)] ; TODO: replace with actual points definition
     (map #(array-map :el %1 :data %2 :point %3 :uuid %4)
          els el-data el-pts (repeatedly random-uuid))))
 
