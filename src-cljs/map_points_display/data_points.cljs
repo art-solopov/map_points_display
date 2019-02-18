@@ -1,4 +1,5 @@
-(ns map-points-display.data-points)
+(ns map-points-display.data-points
+  (:require [map-points-display.markers :refer [make-marker]]))
 
 (defn- read-datum [el]
   {:name (-> el (.querySelector ".item-name") .-innerText)
@@ -15,7 +16,6 @@
 (defn read-data []
   (let [els (get-els)
         el-data (map read-datum els)
-        el-pts (repeat nil)] ; TODO: replace with actual points definition
-    (map #(array-map :el %1 :data %2 :point %3 :uuid %4)
-         els el-data el-pts (repeatedly random-uuid))))
-
+        el-markers (map make-marker el-data)]
+    (map #(array-map :el %1 :data %2 :marker %3 :uuid %4)
+         els el-data el-markers (repeatedly random-uuid))))
