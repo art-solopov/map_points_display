@@ -4,9 +4,10 @@
 (def base-layer oll/base-layer)
 
 (def layer-colors {"museum" "#8affff"
-                    "transport" "#aaff7f"
+                   "transport" "#aaff7f"
                    "accomodation" "#e29cff"
-                   "sight" "#419eee"})
+                   "sight" "#419eee"
+                   "other" "#d1d1d1"})
 
 (defn- make-layer [color]
   (oll/vec-layer (oll/layer-style {:color color})))
