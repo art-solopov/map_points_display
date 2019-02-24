@@ -1,6 +1,8 @@
 (ns map-points-display.markers
   (:require [map-points-display.ext.leaflet :refer [l]]))
 
+(def stroke-color-default "black")
+(def stroke-color-hover "goldenrod")
 
 (def layer-colors {"museum" "#8affff"
                    "transport" "#aaff7f"
@@ -12,7 +14,7 @@
   {:radius 7
    :fill true
    :fillOpacity 0.85
-   :color "black"
+   :color stroke-color-default
    :weight 2})
 
 (defn make-marker [{:keys [lat lon name category]}]
