@@ -2,7 +2,7 @@
   (:require [map-points-display.ext.leaflet :refer [l]]))
 
 (def stroke-color-default "black")
-(def stroke-color-hover "goldenrod")
+(def stroke-color-hover "#be005f")
 
 (def layer-colors {"museum" "#8affff"
                    "transport" "#aaff7f"
@@ -11,7 +11,7 @@
                    "other" "#d1d1d1"})
 
 (def ^private base-opts
-  {:radius 7
+  {:radius 8.5
    :fill true
    :fillOpacity 0.85
    :color stroke-color-default
