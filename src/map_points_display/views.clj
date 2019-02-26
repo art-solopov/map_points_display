@@ -1,6 +1,7 @@
 (ns map-points-display.views
   (:require [clojure.string :as s]
-            [net.cgrand.enlive-html :as html]))
+            [net.cgrand.enlive-html :as html]
+            [map-points-display.config :refer [config]]))
 
 (html/defsnippet group-item "templates/show.html"
   [:section.group :ul.items :> :li]
@@ -22,7 +23,8 @@
 (html/deftemplate show-file "templates/show.html"
   [ctxt]
   [:#app :h1] (html/content (:message ctxt))
-  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
+  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt)))
+  [:body [:script html/last-of-type]] (html/set-attr :src (:js-url @config)))
 
 (html/defsnippet data-files-item "templates/index.html"
   [:ul#data_files :> :li.data-file]

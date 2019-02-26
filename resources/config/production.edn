@@ -1,0 +1,5 @@
+{
+ :serve-target false
+ :js-url "/prod.js"
+ :jetty-config {:port 9400}
+}
