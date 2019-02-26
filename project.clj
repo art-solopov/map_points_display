@@ -10,7 +10,8 @@
                  [compojure "1.5.1"]
                  [enlive "1.1.6"]
                  [org.clojure/data.csv "0.1.4"]
-                 [environ "1.1.0"]]
+                 [environ "1.1.0"]
+                 [binaryage/oops "0.7.0"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]]
   :aliases {"figwheel-dev" ["trampoline" "run" "-m" "figwheel.main"

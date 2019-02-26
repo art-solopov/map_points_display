@@ -1,6 +1,7 @@
-(ns map-points-display.ext.leaflet)
+(ns map-points-display.ext.leaflet
+  (:require [oops.core :refer [oget ocall]]))
 
-(def l (.. js/window -L))
+(def l (oget js/window "L"))
 
 (def attribution
   "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>")
@@ -13,10 +14,10 @@
 
 (defn make-map [lat lon zoom]
   (let [the-map (-> l
-                (.map "map")
-                (.setView (array lat lon) zoom))]
+                (ocall "map" "map")
+                (ocall "setView" (array lat lon) zoom))]
     (-> l
-        (.tileLayer url-template tile-layer-options)
-        (.addTo the-map))
+        (ocall "tileLayer" url-template tile-layer-options)
+        (ocall "addTo" the-map))
     the-map))
 

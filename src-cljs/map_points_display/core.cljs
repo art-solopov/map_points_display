@@ -1,5 +1,6 @@
 (ns map-points-display.core
-  (:require [map-points-display.data-points :as dp]
+  (:require [oops.core :refer [oset! ocall]]
+            [map-points-display.data-points :as dp]
             [map-points-display.ext.leaflet :as leaflet]
             [map-points-display.events :refer
              [make-mouse-events-processor make-click-processor]]))
@@ -24,9 +25,9 @@
         click-proc (make-click-processor the-map)]
     (reset! the-map (leaflet/make-map center-lat center-lon 13))
     (doseq [point @data-points]
-      (.addTo (:marker point) @the-map)
+      (ocall (:marker point) "addTo" @the-map)
       (let [el (:el point)]
-        (set! (.. el -dataset -elid) (:uuid point))
+        (oset! el "dataset.!elid" (:uuid point))
         (.addEventListener el "mouseenter" entlv-proc)
         (.addEventListener el "mouseleave" entlv-proc)
         (.addEventListener (.querySelector el "a") "click" click-proc)))))

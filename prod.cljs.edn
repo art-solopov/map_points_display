@@ -2,4 +2,4 @@
   :hot-reload-cljs false}
 {:main map-points-display.core
  :output-to "resources/public/prod.js"
- :optimizations :whitespace}
+ :optimizations :advanced}
