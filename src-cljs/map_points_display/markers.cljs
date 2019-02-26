@@ -8,6 +8,8 @@
                    "transport" "#aaff7f"
                    "accomodation" "#e29cff"
                    "sight" "#419eee"
+                   "food" "#bc7d00"
+                   "shop" "#8b8bcf"
                    "other" "#d1d1d1"})
 
 (def ^private base-opts
