@@ -18,4 +18,5 @@ body {
 .map {
     flex: 1 0 640px;
     min-height: 640px;
+    max-height: 90vh;
 }
