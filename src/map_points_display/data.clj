@@ -2,6 +2,7 @@
   (:require [clojure.data.csv :as csv]
             [clojure.string :as s]
             [clojure.java.io :as io]
+            [environ.core :refer [env]]
             [map-points-display.utils :refer [path-join]]))
 
 (defn- read-rows [file-path]
@@ -9,7 +10,10 @@
     (into [] (csv/read-csv reader))))
 
 (def default-data "data.csv")
-(def data-path "./data")
+(def data-path
+  (if (= (env :app-env) "production")
+    (env :data-path)
+    "./data"))
 
 (defn list-data-files []
   (->> data-path

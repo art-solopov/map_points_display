@@ -1,5 +1,4 @@
 {
  :serve-target true
  :js-url "/cljs-out/dev-main.js"
- :jetty-config {:port 9400}
 }
