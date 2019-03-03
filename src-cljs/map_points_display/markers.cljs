@@ -1,5 +1,6 @@
 (ns map-points-display.markers
-  (:require [map-points-display.ext.leaflet :refer [l]]))
+  (:require [oops.core :refer [ocall]]
+            [map-points-display.ext.leaflet :refer [l]]))
 
 (def stroke-color-default "black")
 (def stroke-color-hover "#be005f")
@@ -21,6 +22,6 @@
 
 (defn make-marker [{:keys [lat lon name category]}]
   (let [marker-conf (merge base-opts {:fillColor (layer-colors category)})
-        marker (.circleMarker l (array lat lon) (clj->js marker-conf))]
-    (.bindPopup marker (str name " [" category "]"))
+        marker (ocall l "circleMarker" (array lat lon) (clj->js marker-conf))]
+    (ocall marker "bindPopup" (str name " [" category "]"))
     marker))

@@ -12,3 +12,4 @@ pom.xml.asc
 /.rebel_readline_history
 data.csv
 data/*.csv
+resources/public/prod.js

@@ -1,0 +1,4 @@
+{
+ :serve-target true
+ :js-url "/cljs-out/dev-main.js"
+}

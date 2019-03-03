@@ -1,0 +1,4 @@
+{
+ :serve-target false
+ :js-url "/prod.js"
+}

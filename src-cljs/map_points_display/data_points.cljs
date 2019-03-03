@@ -1,17 +1,15 @@
 (ns map-points-display.data-points
-  (:require [map-points-display.markers :refer [make-marker]]))
+  (:require [oops.core :refer [oget]]
+            [map-points-display.markers :refer [make-marker]]))
 
 (defn- read-datum [el]
   {:name (-> el (.querySelector ".item-name") .-innerText)
-   :lat (js/Number (.. el -dataset -lat))
-   :lon (js/Number (.. el -dataset -lon))
-   :category (.. el -dataset -category)})
+   :lat (js/Number (oget el "dataset.lat"))
+   :lon (js/Number (oget el "dataset.lon"))
+   :category (oget el "dataset.category")})
 
 (defn- get-els []
   (array-seq (.querySelectorAll js/document ".group .items li")))
-
-(defn- update-els [el uuid]
-  (set! (.. el -dataset -id) uuid))
 
 (defn read-data []
   (let [els (get-els)

@@ -2,16 +2,20 @@
   (:require [ring.adapter.jetty :as rj]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file :refer [wrap-file]]
-            [ring.middleware.reload :refer [wrap-reload]]
-            [map-points-display.routes :as routes])
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [ring.middleware.not-modified :refer [wrap-not-modified]]
+            [map-points-display.routes :as routes]
+            [map-points-display.config :refer [config]]
+            [environ.core :refer [env]])
   (:gen-class))
 
-(def app
-  (-> (wrap-reload #'routes/app)
+(def ^:private handler-base
+  (-> routes/app
       (wrap-resource "public")
-      (wrap-file "./target/public")))
+      wrap-content-type
+      wrap-not-modified))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (rj/run-jetty app {:port 9400}))
+(def handler
+  (if (:serve-target @config)
+    (wrap-file handler-base "./target/public")
+    handler-base))

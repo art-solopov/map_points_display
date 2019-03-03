@@ -1,6 +1,14 @@
 (ns map-points-display.views
   (:require [clojure.string :as s]
-            [net.cgrand.enlive-html :as html]))
+            [environ.core :refer [env]]
+            [net.cgrand.enlive-html :as html]
+            [map-points-display.config :refer [config]]))
+
+(def ^:private url-prefix
+  (env :url-prefix))
+
+(defn- url-for [path]
+  (str url-prefix path))
 
 (html/defsnippet group-item "templates/show.html"
   [:section.group :ul.items :> :li]
@@ -22,14 +30,17 @@
 (html/deftemplate show-file "templates/show.html"
   [ctxt]
   [:#app :h1] (html/content (:message ctxt))
-  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
+  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt)))
+  [:body [:script html/last-of-type]] (html/set-attr :src (url-for (:js-url @config)))
+  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/defsnippet data-files-item "templates/index.html"
   [:ul#data_files :> :li.data-file]
   [item]
   [:li :> :a] (html/do->
                (html/content (s/capitalize item))
-               (html/set-attr :href (str "/data/" item))))
+               (html/set-attr :href (->> item (str "/data/") url-for)))
+  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/deftemplate index-file "templates/index.html"
   [ctxt]
