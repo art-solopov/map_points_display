@@ -13,4 +13,6 @@ pom.xml.asc
 data.csv
 data/*.csv
 resources/public/prod.js
+resources/public/css/app.css
+node_modules
 _build/*.war

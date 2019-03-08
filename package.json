@@ -1,0 +1,18 @@
+{
+  "name": "map_points_display_assets",
+  "version": "1.0.0",
+  "description": "Assets for map_points_display",
+  "main": "gulpfile.js",
+  "repository": "git@github.com:art-solopov/map_points_display.git",
+  "author": "Artemiy Solopov <art-solopov@yandex.ru>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-postcss": "^8.0.0",
+    "merge-stream": "^1.0.1",
+    "normalize.css": "^8.0.1",
+    "postcss-font-family-system-ui": "^4.1.0"
+  }
+}
