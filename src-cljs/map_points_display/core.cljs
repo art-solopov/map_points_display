@@ -23,7 +23,7 @@
         center-lon (avg-coord ds :lon)
         entlv-proc (make-mouse-events-processor @data-points)
         click-proc (make-click-processor the-map)]
-    (reset! the-map (leaflet/make-map center-lat center-lon 13))
+    (reset! the-map (leaflet/make-map center-lat center-lon 15))
     (doseq [point @data-points]
       (ocall (:marker point) "addTo" @the-map)
       (let [el (:el point)]

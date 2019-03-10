@@ -14,7 +14,7 @@
                    "other" "#d1d1d1"})
 
 (def ^private base-opts
-  {:radius 8.5
+  {:radius 12
    :fill true
    :fillOpacity 0.85
    :color stroke-color-default
