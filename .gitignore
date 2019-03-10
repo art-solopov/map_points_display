@@ -13,3 +13,4 @@ pom.xml.asc
 data.csv
 data/*.csv
 resources/public/prod.js
+_build/*.war
