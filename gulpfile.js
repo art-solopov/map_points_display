@@ -20,11 +20,19 @@ function css() {
         .pipe(dest('resources/public/css/'))
 }
 
+function js() {
+    let assets = src(['assets/js/**/*.js'])
+
+    return assets.pipe(concat('app.js'))
+        .pipe(dest('target/public/js'))
+}
+
 function watchAssets() {
-    return watch(['assets/**/*.css'], {ignoreInitial: false}, exports.default)
+    return watch(['assets/**/*.css', 'assets/**/*.js'], {ignoreInitial: false}, exports.default)
 }
 
 exports.css = css
+exports.js = js
 
-exports.default = series(css)
+exports.default = series(css, js)
 exports.watch = watchAssets

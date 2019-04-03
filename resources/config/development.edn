@@ -1,4 +1,4 @@
 {
  :serve-target true
- :js-url "/cljs-out/dev-main.js"
+ :js-url "/js/app.js"
 }
