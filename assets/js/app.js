@@ -5,7 +5,6 @@ const MAP_URL = "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png"
 
 function getDataPoints() {
     let els = Array.from(document.querySelectorAll('.group .items li'))
-    console.log(els)
 
     return els.map(el => {
         let data = {
@@ -28,15 +27,16 @@ const MARKER_COLORS = {
     "other": "#d1d1d1",
 }
 
+const MARKER_DEFAULT_BORDER = "black"
+const MARKER_HOVER_BORDER = "#be005f"
+
 const BASE_MARKER_OPTS = {
     radius: 12,
     fill: true,
     fillOpacity: 0.85,
-    color: "black",
+    color: MARKER_DEFAULT_BORDER,
     weight: 2
 }
-
-const MARKER_HOVER_COLOR = "#be005f"
 
 function makeMarker({name, lat, lon, category}) {
     let options = Object.assign({fillColor: MARKER_COLORS[category]},
@@ -60,18 +60,35 @@ function makeMouseEventProcessor(dataPoints) {
         let dp = dataPoints.find(e => e.id === elid)
 
         let style = {};
-        if(evtype == 'mouseenter') { style.color = MARKER_HOVER_COLOR }
-        else { style.color = "black" }
+        if(evtype == 'mouseenter') { style.color = MARKER_HOVER_BORDER }
+        else { style.color = MARKER_DEFAULT_BORDER }
         dp.marker.setStyle(style)
     }
 }
 
+function makeClickProcessor(map) {
+    return event => {
+        let { target } = event;
+        target = target.parentElement
+        let { lat, lon } = target.dataset
+
+        event.preventDefault()
+        map.panTo([lat, lon].map(Number))
+    }
+}
+
 function main() {
-    let map = L.map('map').setView([43.766, 11.233], 15)
+    dataPoints = getDataPoints()
+    let baseLatLon = dataPoints.reduce(([accLat, accLon], dp) => {
+        let {lat, lon} = dp.data
+        return [accLat + lat, accLon + lon]
+    }, [0, 0]).map(e => e / dataPoints.length)
+
+    let map = L.map('map').setView(baseLatLon, 15)
     L.tileLayer(MAP_URL, {attribution: MAP_ATTRIBUTION}).addTo(map)
 
-    dataPoints = getDataPoints()
     let moev = makeMouseEventProcessor(dataPoints)
+    let clev = makeClickProcessor(map)
 
     dataPoints.forEach((dp) => {
         dp.marker = makeMarker(dp.data)
@@ -83,6 +100,7 @@ function main() {
 
         dp.el.addEventListener('mouseenter', moev)
         dp.el.addEventListener('mouseleave', moev)
+        dp.el.addEventListener('click', clev)
     })
 }
 
