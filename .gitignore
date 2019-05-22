@@ -14,5 +14,6 @@ data.csv
 data/*.csv
 resources/public/prod.js
 resources/public/css/app.css
+resources/public/js/*.js
 node_modules
 _build/*.war
