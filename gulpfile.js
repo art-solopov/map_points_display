@@ -24,7 +24,7 @@ function js() {
     let assets = src(['assets/js/**/*.js'])
 
     return assets.pipe(concat('app.js'))
-        .pipe(dest('target/public/js'))
+        .pipe(dest('resources/public/js'))
 }
 
 function watchAssets() {
