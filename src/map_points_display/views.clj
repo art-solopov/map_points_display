@@ -2,7 +2,8 @@
   (:require [clojure.string :as s]
             [environ.core :refer [env]]
             [net.cgrand.enlive-html :as html]
-            [map-points-display.config :refer [config]]))
+            [map-points-display.config :refer [config]])
+  (:import (java.io StringReader)))
 
 (def ^:private url-prefix
   (env :url-prefix))
@@ -27,11 +28,21 @@
   [:h2.group-type] (html/content (s/capitalize name))
   [:ul.items] (html/content (map group-item items)))
 
-(html/deftemplate show-file "templates/show.html"
+(html/defsnippet show-header "templates/show.html"
+  [:head #{[[:link (html/but html/first-of-type)]] [:script]}]
+  [])
+
+(html/defsnippet show-content "templates/show.html"
+  #{[:#map] [:#app]}
   [ctxt]
   [:#app :h1] (html/content (:message ctxt))
-  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt)))
-  [:body [:script html/last-of-type]] (html/set-attr :src (url-for (:js-url @config)))
+  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
+
+(html/deftemplate show-file "templates/_base.html"
+  [ctxt]
+  [:head] (html/append (show-header))
+  [:.layout] (html/content (show-content ctxt))
+  [:body] (html/append (html/html [:script {:src (url-for (:js-url @config))}]))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/defsnippet data-files-item "templates/index.html"
@@ -42,6 +53,12 @@
                (html/set-attr :href (->> item (str "/data/") url-for)))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
-(html/deftemplate index-file "templates/index.html"
+(html/defsnippet data-files-list "templates/index.html"
+  [:.layout :> :main]
   [ctxt]
   [:ul#data_files] (html/content (map data-files-item (:files ctxt))))
+
+(html/deftemplate index-file "templates/_base.html"
+  [ctxt]
+  [:.layout] (html/content (data-files-list ctxt))
+  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
