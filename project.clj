@@ -16,4 +16,5 @@
   :ring {:port 9400 :handler map-points-display.core/handler}
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
-             :dev {:env {:app-env "development"}}})
+             :dev {:env {:app-env "development"}
+                   :ring {:nrepl {:start? true}}}})

@@ -7,9 +7,11 @@
             [map-points-display.data :as data]))
 
 (defroutes app
-  (GET "/" []
+  (GET "/" [:as {s :session}]
        (let [files (data/list-data-files)]
-         (views/index-file {:files files})))
+         {:body (views/index-file {:files files})
+          :headers {"Content-Type" "text/html"}
+          :session {:view "/"}}))
   (GET "/data/:data-file" [data-file]
        (let [groups (data/load-data (str data-file ".csv"))]
          (views/show-file {:groups groups :message (s/capitalize data-file)})))
