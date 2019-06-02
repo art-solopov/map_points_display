@@ -3,7 +3,7 @@
            [java.util.concurrent ScheduledThreadPoolExecutor TimeUnit]))
 
 (def ^:private auth-db (atom {}))
-(def session-db (atom #{}))
+(def session-db (atom {}))
 (def sessions-expiration-timer (atom nil))
 
 (def ^:private TOKEN_TIME (* 3600 18))
@@ -24,7 +24,8 @@
   ;; TODO: replace with an actual authentication database
   (reset! auth-db {"admin" "admin"})
   (reset! sessions-expiration-timer (ScheduledThreadPoolExecutor. 2))
-  ;; (.scheduleAtFixedRate @sessions-expiration-timer session-expiration-routine 10 10 TimeUnit/SECONDS))
+  ;; (.scheduleAtFixedRate @sessions-expiration-timer session-expiration-routine 1 1 TimeUnit/HOURS)
+  )
 
 (defn authenticate
   [login password]

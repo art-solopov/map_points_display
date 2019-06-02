@@ -30,3 +30,24 @@ body {
         order: 1;
     }
 }
+
+form {
+    padding: 1em;
+}
+
+form div {
+    display: flex;
+    flex-flow: row nospan;
+    justify-content: space-between;
+    align-items: baseline;
+
+    margin-bottom: 0.25em;
+}
+
+form div label {
+    width: 10em;
+    margin-right: 0.5em;
+    font-size: 75%;
+    font-weight: bold;
+    text-align: right;
+}

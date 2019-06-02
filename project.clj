@@ -13,7 +13,8 @@
   :plugins [[lein-environ "1.1.0"]
             [lein-ring "0.12.5"]]
   :target-path "target/%s"
-  :ring {:port 9400 :handler map-points-display.core/handler}
+  :ring {:port 9400 :handler map-points-display.core/handler
+         :init map-points-display.core/init}
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
              :dev {:env {:app-env "development"}

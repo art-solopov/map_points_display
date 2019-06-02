@@ -62,3 +62,13 @@
   [ctxt]
   [:.layout] (html/content (data-files-list ctxt))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
+
+(html/defsnippet login-form-content "templates/form.html"
+  [:.layout :form]
+  [ctxt]
+  [:input#login] (html/set-attr :value (:login ctxt)))
+
+(html/deftemplate login-form "templates/_base.html"
+  [ctxt]
+  [:.layout] (html/content (login-form-content ctxt))
+  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
