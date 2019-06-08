@@ -9,7 +9,7 @@
             [ring.middleware.session.memory :refer [memory-store]]
             [map-points-display.routes :as routes]
             [map-points-display.config :refer [config]]
-            [map-points-display.auth :refer [init-auth session-db]]
+            [map-points-display.auth :refer [init-auth session-store]]
             [environ.core :refer [env]])
   (:gen-class))
 
@@ -19,7 +19,7 @@
 (def handler
   (-> routes/app
       wrap-params
-      (wrap-session {:store (memory-store session-db)})
+      (wrap-session {:store (memory-store session-store)})
       (wrap-resource "public")
       wrap-content-type
       wrap-not-modified))
