@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width; initial-scale=1" />
+        <title>Map points display</title>
+        <link href="../public/css/app.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="layout">
+            <form action="" method="POST">
+                <div>
+                    <label>Type</label>
+                    <!-- TODO extract into a constant? -->
+                    <select id="type" name="type" required>
+                        <option>SELECT TYPE</option>
+                        <option value="transport">Transport</option>
+                        <option value="museum">Museum</option>
+                        <option value="sight">Sight</option>
+                        <option value="accomodation">Accomodation</option>
+                        <option value="food">Food</option>
+                        <option value="shop">Shop</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" value="" required />
+                </div>
+                <div>
+                    <label for="address">Address</label>
+                    <input id="address" name="address" type="text" value=""/>
+                </div>
+                <div>
+                    <label>Coordinates</label>
+                    <input id="lat" name="lat" type="text" required pattern="\d+(\.\d+)?" />
+                    <input id="lon" name="lon" type="text" required pattern="\d+(\.\d+)?" />
+                </div>
+                <div>
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
