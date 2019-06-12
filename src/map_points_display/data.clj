@@ -20,6 +20,10 @@
   [table]
   (str "map-points:table:" table))
 
+(defn- meta-key
+  [table]
+  (str "map-points:_meta:" table))
+
 (defn read-table
   [table]
   (wcar* (car/get (table-key table))))
@@ -28,6 +32,14 @@
   [table-name]
   (let [raw-data (read-table table-name)]
     (group-by :type raw-data)))
+
+(defn- table-request-headers
+  [table-name]
+  (let [{api-key :airtable-api-key} (secrets)
+        hdr {"Authorization" (str "Bearer " api-key)}]
+    (if-let [{etag :etag} (wcar* (car/get (meta-key table-name)))]
+      (merge hdr {"If-None-Match" etag})
+      hdr)))
 
 (defn- postprocess-data
   [data]
@@ -38,14 +50,23 @@
 
 (defn fetch-table-data
   [table-name]
-  (let [{adb :airtable-database api-key :airtable-api-key} (secrets)
+  (let [{adb :airtable-database} (secrets)
         url (str "https://api.airtable.com/v0/" adb "/" table-name)
-        resp (http/get url {:headers {"Authorization" (str "Bearer " api-key)}
-                            :cookie-policy :standard})]
-    (if (= (:status resp) 200)
-      (-> resp :body json/read-str postprocess-data))))
+        resp (http/get url {:headers (table-request-headers table-name)
+                            :cookie-policy :standard
+                            :throw-exceptions false})]
+    (case (:status resp)
+      200 (do
+            (println "OK, data retrieved")
+            ;; TODO: replace with clj-http's cheshire integration
+            {:data (-> resp :body json/read-str postprocess-data)
+             :meta {:etag (-> resp :headers :etag)}})
+      304 (println "Not modified")
+      404 (println "Not found")
+      (range 400 600) (println "Error"))))
 
 (defn update-table-data
   [table]
-  (when-let [data (fetch-table-data table)]
-    (wcar* (car/set (table-key table) data))))
+  (when-let [{:keys [data meta]} (fetch-table-data table)]
+    (wcar* (car/set (table-key table) data)
+           (car/set (meta-key table) meta))))
