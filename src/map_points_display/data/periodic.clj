@@ -6,7 +6,7 @@
 
 (defn update-tables
   []
-  (doseq [table tables-list]
+  (doseq [table (tables-list)]
     (println "Updating table" table)
     (update-table-data table)
     (Thread/sleep 1000)))

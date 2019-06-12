@@ -11,9 +11,9 @@
       (merge base-config (-> extra-config-path slurp edn/read-string))
       base-config)))
 
-(def config (delay (read-config)))
+(def config (memoize read-config))
 
-(def secrets-file (env :secrets-file "./secrets.edn"))
+(defn- secrets-file [] (get (config) :secrets-file "./secrets.edn"))
 (defn- read-secrets []
-  (-> secrets-file slurp edn/read-string))
-(def secrets (delay (read-secrets)))
+  (-> (secrets-file) slurp edn/read-string))
+(def secrets (memoize read-secrets))

@@ -5,7 +5,6 @@
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [map-points-display.routes :as routes]
-            [map-points-display.config :refer [config]]
             [map-points-display.data.periodic :as data-p]
             [environ.core :refer [env]])
   (:gen-class))

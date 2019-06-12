@@ -42,7 +42,7 @@
   [ctxt]
   [:head] (html/append (show-header))
   [:.layout] (html/content (show-content ctxt))
-  [:body] (html/append (html/html [:script {:src (url-for (:js-url @config))}]))
+  [:body] (html/append (html/html [:script {:src (url-for (:js-url (config)))}]))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/defsnippet data-tables-item "templates/index.html"

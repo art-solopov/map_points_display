@@ -12,6 +12,7 @@ pom.xml.asc
 /.rebel_readline_history
 data.csv
 data/*.csv
+data/*.edn
 resources/public/prod.js
 resources/public/css/app.css
 resources/public/js/*.js

@@ -8,7 +8,7 @@
 
 (defroutes app
   (GET "/" []
-       (let [tables data/tables-list]
+       (let [tables (data/tables-list)]
          (views/index-table {:tables tables})))
   (GET "/data/:data-table" [data-table]
        (let [groups (data/load-data data-table)]

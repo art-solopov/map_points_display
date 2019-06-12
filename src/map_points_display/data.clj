@@ -9,14 +9,12 @@
             [map-points-display.config :refer [config secrets]]
             [map-points-display.utils :refer [path-join]]))
 
-(def redis-config
-  (:redis @config))
-
 (defmacro wcar* [& body]
-  `(wcar redis-config ~@body))
+  `(wcar (:redis (config)) ~@body))
 
-(def tables-list
-  (:tables-list @config))
+(defn tables-list
+  []
+  (:tables-list (config)))
 
 (defn- table-key
   [table]
@@ -40,7 +38,7 @@
 
 (defn fetch-table-data
   [table-name]
-  (let [{adb :airtable-database api-key :airtable-api-key} @secrets
+  (let [{adb :airtable-database api-key :airtable-api-key} (secrets)
         url (str "https://api.airtable.com/v0/" adb "/" table-name)
         resp (http/get url {:headers {"Authorization" (str "Bearer " api-key)}
                             :cookie-policy :standard})]

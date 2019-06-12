@@ -1,4 +1,7 @@
 {
  :serve-target false
  :js-url "/js/app.js"
+ :extra-config "/data/config.edn"
+ :redis {:spec {:host "redis"}}
+ :secrets-file "/data/secrets.edn"
 }
