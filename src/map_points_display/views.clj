@@ -38,27 +38,27 @@
   [:#app :h1] (html/content (:message ctxt))
   [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
 
-(html/deftemplate show-file "templates/_base.html"
+(html/deftemplate show-table "templates/_base.html"
   [ctxt]
   [:head] (html/append (show-header))
   [:.layout] (html/content (show-content ctxt))
   [:body] (html/append (html/html [:script {:src (url-for (:js-url @config))}]))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
-(html/defsnippet data-files-item "templates/index.html"
-  [:ul#data_files :> :li.data-file]
+(html/defsnippet data-tables-item "templates/index.html"
+  [:ul#data_tables :> :li.data-table]
   [item]
   [:li :> :a] (html/do->
                (html/content (s/capitalize item))
                (html/set-attr :href (->> item (str "/data/") url-for)))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
-(html/defsnippet data-files-list "templates/index.html"
+(html/defsnippet data-tables-list "templates/index.html"
   [:.layout :> :main]
   [ctxt]
-  [:ul#data_files] (html/content (map data-files-item (:files ctxt))))
+  [:ul#data_tables] (html/content (map data-tables-item (:tables ctxt))))
 
-(html/deftemplate index-file "templates/_base.html"
+(html/deftemplate index-table "templates/_base.html"
   [ctxt]
-  [:.layout] (html/content (data-files-list ctxt))
+  [:.layout] (html/content (data-tables-list ctxt))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))

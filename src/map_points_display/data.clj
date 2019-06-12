@@ -1,32 +1,29 @@
 (ns map-points-display.data
-  (:require [clojure.data.csv :as csv]
-            [clojure.string :as s]
+  (:require [clojure.string :as s]
             [clojure.java.io :as io]
             [environ.core :refer [env]]
+            [taoensso.carmine :as car :refer [wcar]]
+            [map-points-display.config :refer [config]]
             [map-points-display.utils :refer [path-join]]))
 
-(defn- read-rows [file-path]
-  (with-open [reader (io/reader file-path)]
-    (into [] (csv/read-csv reader))))
+(def redis-config
+  (:redis @config))
 
-(def default-data "data.csv")
-(def data-path
-  (if (= (env :app-env) "production")
-    (env :data-path)
-    "./data"))
+(defmacro wcar* [& body]
+  `(wcar redis-config ~@body))
 
-(defn list-data-files []
-  (->> data-path
-       io/file
-       file-seq
-       (filter #(.isFile %))
-       (map #(.getName %))
-       (filter #(re-matches #"^[\w_-]+\.csv$" %))
-       (map #(s/replace % #".csv$" ""))))
+(def tables-list
+  (:tables-list @config))
 
-(defn load-data [file-name]
-  (let [file-path (path-join data-path file-name)
-        rows (read-rows file-path)
-        header (map keyword (first rows))
-        data (rest rows)]
-    (->> data (map #(zipmap header %)) (group-by :type))))
+(defn- table-key
+  [table]
+  (str "map-points:table:" table))
+
+(defn read-table
+  [table]
+  (wcar* (car/get (table-key table))))
+
+(defn load-data
+  [table-name]
+  (let [raw-data (read-table table-name)]
+    (group-by :type raw-data)))

@@ -17,5 +17,4 @@
 
 (def handler
   (if (:serve-target @config)
-    (wrap-file handler-base "./target/public")
     handler-base))

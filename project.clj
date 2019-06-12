@@ -7,7 +7,9 @@
                  [ring "1.6.3"]
                  [compojure "1.5.1"]
                  [enlive "1.1.6"]
-                 [org.clojure/data.csv "0.1.4"]
+                 [org.clojure/data.json "0.2.6"]
+                 [com.taoensso/carmine "2.19.1"]
+                 [clj-http "3.10.0"]
                  [environ "1.1.0"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]

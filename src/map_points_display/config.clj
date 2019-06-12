@@ -5,7 +5,10 @@
 
 (defn- read-config []
   (let [name (env :app-env)
-        full-name (str "config/" name ".edn")]
-    (-> full-name io/resource slurp edn/read-string)))
+        full-name (str "config/" name ".edn")
+        base-config (-> full-name io/resource slurp edn/read-string)]
+    (if-let [extra-config-path (:extra-config base-config)]
+      (merge base-config (-> extra-config-path slurp edn/read-string))
+      base-config)))
 
 (def config (delay (read-config)))
