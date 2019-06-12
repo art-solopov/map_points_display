@@ -17,3 +17,4 @@ resources/public/css/app.css
 resources/public/js/*.js
 node_modules
 _build/*.war
+secrets.edn

@@ -12,3 +12,8 @@
       base-config)))
 
 (def config (delay (read-config)))
+
+(def secrets-file (env :secrets-file "./secrets.edn"))
+(defn- read-secrets []
+  (-> secrets-file slurp edn/read-string))
+(def secrets (delay (read-secrets)))
