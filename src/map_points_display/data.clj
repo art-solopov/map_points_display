@@ -1,32 +1,73 @@
 (ns map-points-display.data
-  (:require [clojure.data.csv :as csv]
-            [clojure.string :as s]
+  (:require [clojure.string :as s]
+            [clojure.walk :refer [keywordize-keys]]
             [clojure.java.io :as io]
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [environ.core :refer [env]]
+            [clj-http.client :as http]
+            [taoensso.carmine :as car :refer [wcar]]
+            [map-points-display.config :refer [config secrets]]
             [map-points-display.utils :refer [path-join]]))
 
-(defn- read-rows [file-path]
-  (with-open [reader (io/reader file-path)]
-    (into [] (csv/read-csv reader))))
+(defmacro wcar* [& body]
+  `(wcar (:redis (config)) ~@body))
 
-(def default-data "data.csv")
-(def data-path
-  (if (= (env :app-env) "production")
-    (env :data-path)
-    "./data"))
+(defn tables-list
+  []
+  (:tables-list (config)))
 
-(defn list-data-files []
-  (->> data-path
-       io/file
-       file-seq
-       (filter #(.isFile %))
-       (map #(.getName %))
-       (filter #(re-matches #"^[\w_-]+\.csv$" %))
-       (map #(s/replace % #".csv$" ""))))
+(defn- table-key
+  [table]
+  (str "map-points:table:" table))
 
-(defn load-data [file-name]
-  (let [file-path (path-join data-path file-name)
-        rows (read-rows file-path)
-        header (map keyword (first rows))
-        data (rest rows)]
-    (->> data (map #(zipmap header %)) (group-by :type))))
+(defn- meta-key
+  [table]
+  (str "map-points:_meta:" table))
+
+(defn read-table
+  [table]
+  (wcar* (car/get (table-key table))))
+
+(defn load-data
+  [table-name]
+  (let [raw-data (read-table table-name)]
+    (group-by :type raw-data)))
+
+(defn- table-request-headers
+  [table-name]
+  (let [{api-key :airtable-api-key} (secrets)
+        hdr {"Authorization" (str "Bearer " api-key)}]
+    (if-let [{etag :etag} (wcar* (car/get (meta-key table-name)))]
+      (merge hdr {"If-None-Match" etag})
+      hdr)))
+
+(defn- postprocess-data
+  [data]
+  (let [records (data "records")]
+    (->> records
+         (map #(get % "fields"))
+         (map keywordize-keys))))
+
+(defn fetch-table-data
+  [table-name]
+  (let [{adb :airtable-database} (secrets)
+        url (str "https://api.airtable.com/v0/" adb "/" table-name)
+        resp (http/get url {:headers (table-request-headers table-name)
+                            :cookie-policy :standard
+                            :throw-exceptions false})]
+    (case (:status resp)
+      200 (do
+            (log/info "OK, data retrieved")
+            ;; TODO: replace with clj-http's cheshire integration
+            {:data (-> resp :body json/read-str postprocess-data)
+             :meta {:etag (-> resp :headers :etag)}})
+      304 (log/info "Not modified")
+      404 (log/warn "Not found")
+      (range 400 600) (log/warn "Error"))))
+
+(defn update-table-data
+  [table]
+  (when-let [{:keys [data meta]} (fetch-table-data table)]
+    (wcar* (car/set (table-key table) data)
+           (car/set (meta-key table) meta))))

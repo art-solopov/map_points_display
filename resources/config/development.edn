@@ -1,4 +1,6 @@
 {
  :serve-target true
  :js-url "/js/app.js"
+ :tables-list ["Florence" "Amsterdam"]
+ :redis {:spec {:db 10}}
 }

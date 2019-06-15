@@ -8,11 +8,11 @@
 
 (defroutes app
   (GET "/" []
-       (let [files (data/list-data-files)]
-         (views/index-file {:files files})))
-  (GET "/data/:data-file" [data-file]
-       (let [groups (data/load-data (str data-file ".csv"))]
-         (views/show-file {:groups groups :message (s/capitalize data-file)})))
+       (let [tables (data/tables-list)]
+         (views/index-table {:tables tables})))
+  (GET "/data/:data-table" [data-table]
+       (let [groups (data/load-data data-table)]
+         (views/show-table {:groups groups :message data-table})))
   (GET "/templates/:filename" [filename]
        (resource-response filename {:root "templates"}))
   (route/not-found "Not found"))

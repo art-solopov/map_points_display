@@ -7,13 +7,19 @@
                  [ring "1.6.3"]
                  [compojure "1.5.1"]
                  [enlive "1.1.6"]
-                 [org.clojure/data.csv "0.1.4"]
-                 [environ "1.1.0"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [com.taoensso/carmine "2.19.1"]
+                 [clj-http "3.10.0"]
+                 [environ "1.1.0"]
+                 [org.clojure/tools.logging "0.4.1"]
+                 [ch.qos.logback/logback-classic "1.2.3"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]
             [lein-ring "0.12.5"]]
   :target-path "target/%s"
-  :ring {:port 9400 :handler map-points-display.core/handler}
+  :ring {:port 9400 :handler map-points-display.core/handler
+         :init map-points-display.core/init
+         :destroy map-points-display.core/destroy}
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
              :dev {:env {:app-env "development"}}})
