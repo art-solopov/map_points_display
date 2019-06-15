@@ -3,6 +3,7 @@
             [clojure.walk :refer [keywordize-keys]]
             [clojure.java.io :as io]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [environ.core :refer [env]]
             [clj-http.client :as http]
             [taoensso.carmine :as car :refer [wcar]]
@@ -57,13 +58,13 @@
                             :throw-exceptions false})]
     (case (:status resp)
       200 (do
-            (println "OK, data retrieved")
+            (log/info "OK, data retrieved")
             ;; TODO: replace with clj-http's cheshire integration
             {:data (-> resp :body json/read-str postprocess-data)
              :meta {:etag (-> resp :headers :etag)}})
-      304 (println "Not modified")
-      404 (println "Not found")
-      (range 400 600) (println "Error"))))
+      304 (log/info "Not modified")
+      404 (log/warn "Not found")
+      (range 400 600) (log/warn "Error"))))
 
 (defn update-table-data
   [table]

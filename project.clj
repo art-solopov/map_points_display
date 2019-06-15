@@ -10,7 +10,9 @@
                  [org.clojure/data.json "0.2.6"]
                  [com.taoensso/carmine "2.19.1"]
                  [clj-http "3.10.0"]
-                 [environ "1.1.0"]]
+                 [environ "1.1.0"]
+                 [org.clojure/tools.logging "0.4.1"]
+                 [ch.qos.logback/logback-classic "1.2.3"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]
             [lein-ring "0.12.5"]]
