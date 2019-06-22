@@ -18,6 +18,7 @@ var eventsProc = {
 
         event.preventDefault()
         this.map.panTo([lat, lon].map(Number))
+        this.map.getContainer().scrollIntoView({ behavior: 'smooth' })
     }
 }
 
