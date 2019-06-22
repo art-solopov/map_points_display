@@ -34,7 +34,7 @@ function main() {
         return [accLat + lat, accLon + lon]
     }, [0, 0]).map(e => e / dataPoints.length)
 
-    let map = L.map('map').setView(baseLatLon, 15)
+    let map = L.map('map').setView(baseLatLon, MAP_ZOOM_LEVEL)
     L.tileLayer(MAP_URL, {attribution: MAP_ATTRIBUTION}).addTo(map)
 
     eventsProc.dataPoints = dataPoints
