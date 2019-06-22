@@ -53,7 +53,8 @@
   [table-name]
   (let [{adb :airtable-database} (secrets)
         url (str "https://api.airtable.com/v0/" adb "/" table-name)
-        resp (http/get url {:headers (table-request-headers table-name)
+        resp (http/get url {:query-params {:filterByFormula "AND(name, lat, lon, type)"}
+                            :headers (table-request-headers table-name)
                             :cookie-policy :standard
                             :throw-exceptions false})]
     (case (:status resp)
@@ -64,7 +65,8 @@
              :meta {:etag (-> resp :headers :etag)}})
       304 (log/info "Not modified")
       404 (log/warn "Not found")
-      (range 400 600) (log/warn "Error"))))
+      422 (log/error (str "Something happened\n" (:body resp)))
+      (log/warn (str "Unhandled status " (:status resp))) )))
 
 (defn update-table-data
   [table]
