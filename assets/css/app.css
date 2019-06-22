@@ -3,30 +3,12 @@ body {
     font-family: 'DejaVu Sans', system-ui;
 }
 
-.map {
-    min-height: 60vh;
+.link {
+    padding: 1em;
+    display: inline-block;
 }
 
-@media (min-width: 940px) {
-    .layout {
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch;
-
-        max-width: 1200px;
-        margin: 0 auto;
-        height: 100vh;
-    }
-
-    .app {
-        flex: 0 1 26rem;
-        max-height: 100%;
-        overflow-y: scroll;
-        order: 0;
-    }
-
-    .map {
-        flex: 1 0 640px;
-        order: 1;
-    }
+.link:hover,
+.link:focus {
+    background: #EEE;
 }

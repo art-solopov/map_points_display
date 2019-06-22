@@ -46,7 +46,7 @@
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/defsnippet data-tables-item "templates/index.html"
-  [:ul#data_tables :> :li.data-table]
+  [:ul#data_tables :> [:li.data-table html/first-child]]
   [item]
   [:li :> :a] (html/do->
                (html/content (s/capitalize item))
