@@ -12,6 +12,18 @@ function getDataPoints() {
     })
 }
 
+function getBounds(dataPoints) {
+    let lats = dataPoints.map(e => e.data.lat)
+    let lons = dataPoints.map(e => e.data.lon)
+
+    let minLat = Math.min(...lats)
+    let minLon = Math.min(...lons)
+    let maxLat = Math.max(...lats)
+    let maxLon = Math.max(...lons)
+
+    return [[minLat, minLon], [maxLat, maxLon]]
+}
+
 function makeMarker({name, lat, lon, category}) {
     let options = Object.assign({fillColor: MARKER_COLORS[category]},
                                 BASE_MARKER_OPTS)
@@ -34,7 +46,8 @@ function main() {
         return [accLat + lat, accLon + lon]
     }, [0, 0]).map(e => e / dataPoints.length)
 
-    let map = L.map('map').setView(baseLatLon, MAP_ZOOM_LEVEL)
+    let bounds = getBounds(dataPoints)
+    let map = L.map('map').fitBounds(bounds)
     L.tileLayer(MAP_URL, {attribution: MAP_ATTRIBUTION}).addTo(map)
 
     eventsProc.dataPoints = dataPoints
