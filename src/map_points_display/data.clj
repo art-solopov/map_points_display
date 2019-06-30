@@ -8,6 +8,7 @@
             [clj-http.client :as http]
             [taoensso.carmine :as car :refer [wcar]]
             [map-points-display.config :refer [config secrets]]
+            [map-points-display.data.fetch :refer [fetch-airtable-data]]
             [map-points-display.utils :refer [path-join]]))
 
 (defmacro wcar* [& body]
@@ -28,6 +29,10 @@
 (defn read-table
   [table]
   (wcar* (car/get (table-key table))))
+
+(defn read-table-meta
+  [table]
+  (wcar* (car/get (meta-key table))))
 
 (defn load-data
   [table-name]
@@ -51,22 +56,11 @@
 
 (defn fetch-table-data
   [table-name]
-  (let [{adb :airtable-database} (secrets)
-        url (str "https://api.airtable.com/v0/" adb "/" table-name)
-        resp (http/get url {:query-params {:filterByFormula "AND(name, lat, lon, type)"}
-                            :headers (table-request-headers table-name)
-                            :cookie-policy :standard
-                            :throw-exceptions false})]
-    (case (:status resp)
-      200 (do
-            (log/info "OK, data retrieved")
-            ;; TODO: replace with clj-http's cheshire integration
-            {:data (-> resp :body json/read-str postprocess-data)
-             :meta {:etag (-> resp :headers :etag)}})
-      304 (log/info "Not modified")
-      404 (log/warn "Not found")
-      422 (log/error (str "Something happened\n" (:body resp)))
-      (log/warn (str "Unhandled status " (:status resp))) )))
+  (let [{etag :etag} (read-table-meta table-name)]
+    (if-let [table-data (fetch-airtable-data (str "/" table-name) {:etag etag})]
+      (let [{data :data :as all} table-data
+            records (->> data :records (map :fields))]
+        (merge all {:data records})))))
 
 (defn update-table-data
   [table]
