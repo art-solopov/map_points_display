@@ -8,14 +8,38 @@
             [clj-http.client :as http]
             [taoensso.carmine :as car :refer [wcar]]
             [map-points-display.config :refer [config secrets]]
+            [map-points-display.data.fetch :refer [fetch-airtable-data]]
             [map-points-display.utils :refer [path-join]]))
 
 (defmacro wcar* [& body]
   `(wcar (:redis (config)) ~@body))
 
+;; Table list
+
+(def ^:private tables-list-key "map-points:tables-list")
+(def ^:private tables-list-meta-key "map-points:_meta_tables-list")
+
 (defn tables-list
   []
-  (:tables-list (config)))
+  (wcar* (car/get tables-list-key)))
+
+(defn fetch-tables-list
+  []
+  (let [{etag :etag} (wcar* (car/get tables-list-meta-key))]
+    (if-let [atb-data (fetch-airtable-data "/Locations"
+                                           {:query-params {:view "Only Show" :fields ["Name"]}
+                                            :etag etag})]
+      (let [{data :data :as all} atb-data
+            names (->> data :records (map #(->> % :fields :Name)) (into []))]
+        (merge all {:data names})))))
+
+(defn update-tables-list
+  []
+  (if-let [{:keys [data meta]} (fetch-tables-list)]
+    (wcar* (car/set tables-list-key data)
+           (car/set tables-list-meta-key meta))))
+
+;; Tables
 
 (defn- table-key
   [table]
@@ -28,6 +52,10 @@
 (defn read-table
   [table]
   (wcar* (car/get (table-key table))))
+
+(defn read-table-meta
+  [table]
+  (wcar* (car/get (meta-key table))))
 
 (defn load-data
   [table-name]
@@ -51,22 +79,14 @@
 
 (defn fetch-table-data
   [table-name]
-  (let [{adb :airtable-database} (secrets)
-        url (str "https://api.airtable.com/v0/" adb "/" table-name)
-        resp (http/get url {:query-params {:filterByFormula "AND(name, lat, lon, type)"}
-                            :headers (table-request-headers table-name)
-                            :cookie-policy :standard
-                            :throw-exceptions false})]
-    (case (:status resp)
-      200 (do
-            (log/info "OK, data retrieved")
-            ;; TODO: replace with clj-http's cheshire integration
-            {:data (-> resp :body json/read-str postprocess-data)
-             :meta {:etag (-> resp :headers :etag)}})
-      304 (log/info "Not modified")
-      404 (log/warn "Not found")
-      422 (log/error (str "Something happened\n" (:body resp)))
-      (log/warn (str "Unhandled status " (:status resp))) )))
+  (let [{etag :etag} (read-table-meta table-name)
+        formula (format "AND(location=\"%s\", name, lat, lon, type)" table-name)]
+    (if-let [table-data (fetch-airtable-data "/PoI"
+                                             {:query-params {:filterByFormula formula}
+                                              :etag etag})]
+      (let [{data :data :as all} table-data
+            records (->> data :records (map :fields) (into []))]
+        (merge all {:data records})))))
 
 (defn update-table-data
   [table]

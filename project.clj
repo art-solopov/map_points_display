@@ -10,6 +10,7 @@
                  [org.clojure/data.json "0.2.6"]
                  [com.taoensso/carmine "2.19.1"]
                  [clj-http "3.10.0"]
+                 [cheshire "5.8.1"]
                  [environ "1.1.0"]
                  [org.clojure/tools.logging "0.4.1"]
                  [ch.qos.logback/logback-classic "1.2.3"]]
