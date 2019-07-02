@@ -49,7 +49,7 @@
   [:ul#data_tables :> [:li.data-table html/first-child]]
   [item]
   [:li :> :a] (html/do->
-               (html/content (s/capitalize item))
+               (html/content item)
                (html/set-attr :href (->> item (str "/data/") url-for)))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 

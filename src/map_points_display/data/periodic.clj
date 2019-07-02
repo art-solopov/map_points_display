@@ -1,12 +1,14 @@
 (ns map-points-display.data.periodic
   (:require [clojure.tools.logging :as log]
-            [map-points-display.data :refer [tables-list update-table-data]])
+            [map-points-display.data :refer [tables-list update-tables-list update-table-data]])
   (:import [java.util.concurrent ScheduledThreadPoolExecutor TimeUnit]))
 
 (def executor (atom nil))
 
 (defn update-tables
   []
+  (log/info "Updating tables list")
+  (update-tables-list)
   (doseq [table (tables-list)]
     (log/info (str "Updating table " table))
     (update-table-data table)

@@ -79,10 +79,13 @@
 
 (defn fetch-table-data
   [table-name]
-  (let [{etag :etag} (read-table-meta table-name)]
-    (if-let [table-data (fetch-airtable-data (str "/" table-name) {:etag etag})]
+  (let [{etag :etag} (read-table-meta table-name)
+        formula (format "AND(location=\"%s\", name, lat, lon, type)" table-name)]
+    (if-let [table-data (fetch-airtable-data "/PoI"
+                                             {:query-params {:filterByFormula formula}
+                                              :etag etag})]
       (let [{data :data :as all} table-data
-            records (->> data :records (map :fields))]
+            records (->> data :records (map :fields) (into []))]
         (merge all {:data records})))))
 
 (defn update-table-data
