@@ -14,9 +14,32 @@
 (defmacro wcar* [& body]
   `(wcar (:redis (config)) ~@body))
 
+;; Table list
+
+(def ^:private tables-list-key "map-points:tables-list")
+(def ^:private tables-list-meta-key "map-points:_meta_tables-list")
+
 (defn tables-list
   []
-  (:tables-list (config)))
+  (wcar* (car/get tables-list-key)))
+
+(defn fetch-tables-list
+  []
+  (let [{etag :etag} (wcar* (car/get tables-list-meta-key))]
+    (if-let [atb-data (fetch-airtable-data "/Locations"
+                                           {:query-params {:view "Only Show" :fields ["Name"]}
+                                            :etag etag})]
+      (let [{data :data :as all} atb-data
+            names (->> data :records (map #(->> % :fields :Name)) (into []))]
+        (merge all {:data names})))))
+
+(defn update-tables-list
+  []
+  (if-let [{:keys [data meta]} (fetch-tables-list)]
+    (wcar* (car/set tables-list-key data)
+           (car/set tables-list-meta-key meta))))
+
+;; Tables
 
 (defn- table-key
   [table]
