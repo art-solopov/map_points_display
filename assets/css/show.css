@@ -12,6 +12,10 @@
     margin: 0.5em 0;
 }
 
+.app .items li {
+    margin-bottom: 0.75em;
+}
+
 @media (min-width: 940px) {
     .layout {
         display: flex;

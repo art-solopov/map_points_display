@@ -53,7 +53,7 @@ function main() {
 
         dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
         dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
-        dp.el.addEventListener('click', eventsProc.clickHandler)
+        dp.el.querySelector('.pan-link').addEventListener('click', eventsProc.clickHandler)
     })
 }
 

@@ -12,7 +12,7 @@
   (str url-prefix path))
 
 (html/defsnippet group-item "templates/show.html"
-  [:section.group :ul.items :> :li]
+  [:section.group :ul.items :> [:li html/first-child]]
   [item]
   [:li] (html/do->
          (html/set-attr :data-lat (:lat item))

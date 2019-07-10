@@ -13,7 +13,7 @@ var eventsProc = {
     },
     clickHandler(event) {
         let { target } = event;
-        target = target.parentElement
+        target = target.closest('li')
         let { lat, lon } = target.dataset
 
         event.preventDefault()
