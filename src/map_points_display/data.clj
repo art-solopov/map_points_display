@@ -62,6 +62,13 @@
   (let [raw-data (read-table table-name)]
     (group-by :type raw-data)))
 
+(defn load-poi
+  [table-name id]
+  (let [raw-data (read-table table-name)]
+    (->> raw-data
+         (filter #(= (:id %) id))
+         first)))
+
 (defn- table-request-headers
   [table-name]
   (let [{api-key :airtable-api-key} (secrets)
