@@ -17,7 +17,8 @@
   [:li] (html/do->
          (html/set-attr :data-lat (:lat item))
          (html/set-attr :data-lon (:lon item))
-         (html/set-attr :data-category (:type item)))
+         (html/set-attr :data-category (:type item))
+         (html/set-attr :id (:id item)))
   [:.item-name] (html/content (:name item))
   [:.item-address] (html/content (:address item)))
 
