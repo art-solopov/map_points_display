@@ -8,26 +8,30 @@
     <body>
         <div class="layout">
             <main>
-                <div class="map-image-container">
+                <aside class="map-image-container">
                     <img src="https://loremflickr.com/320/280" />
                     <div class="marker"></div>
-                </div>
+                </aside>
 
-                <h1>Title</h1>
+                <header>
+                    <h1>Title</h1>
 
-                <p id="address">A middle-length string for address</p>
+                    <p id="address">A middle-length string for address</p>
+                </header>
 
-                <p class="notes-p">
-                    Some probably long-flowing notes.
+                <section id="nodes">
+                    <p class="notes-p">
+                        Some probably long-flowing notes.
 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac arcu et ante dictum rhoncus id at enim. Proin a tempus ipsum. Proin quis convallis nulla, volutpat aliquam dolor. Morbi dignissim pellentesque purus eget rutrum. Aliquam sit amet erat et mauris tincidunt porta a ut felis. Aliquam erat volutpat. Donec sed eleifend erat, a facilisis purus. Proin et est eros.
-                </p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac arcu et ante dictum rhoncus id at enim. Proin a tempus ipsum. Proin quis convallis nulla, volutpat aliquam dolor. Morbi dignissim pellentesque purus eget rutrum. Aliquam sit amet erat et mauris tincidunt porta a ut felis. Aliquam erat volutpat. Donec sed eleifend erat, a facilisis purus. Proin et est eros.
+                    </p>
+                </section>
 
-                <div id="schedule" class="schedule">
-                    <div class="schedule-row"><span class="mon">Mon</span>–<span class="fri">Fri</span> 10:00–20:00</div>
-                    <div class="schedule-row"><span class="sat">Sat</span> 10:00–18:00</div>
-                    <div class="schedule-row"><span class="sun">Sun</span> 12:00–18:00</div>
-                </div>
+                <section id="schedule" class="schedule">
+                    <div class="schedule-row"><span class="wdays"><span class="mon">Mon</span>–<span class="fri">Fri</span></span>&nbsp;<span class="times">10:00–20:00</span></div>
+                    <div class="schedule-row"><span class="wdays"><span class="sat">Sat</span></span>&nbsp;<span class="times">12:00–20:00</span></div>
+                    <div class="schedule-row"><span class="wdays"><span class="sun">Sun</span></span>&nbsp;<span class="times">12:00–18:00</span></div>
+                </section>
             </main>
         </div>
     </body>

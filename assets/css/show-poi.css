@@ -1,11 +1,13 @@
 .map-image-container {
     position: relative;
+    float: right;
+    padding: 0.25em;
 }
 
 .map-image-container .marker {
     width: 10px;
     height: 10px;
-    background: red;
+    background: #D00;
     border-radius: 50%;
 
     position: absolute;

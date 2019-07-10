@@ -2,7 +2,8 @@
   (:require [clojure.string :as s]
             [environ.core :refer [env]]
             [net.cgrand.enlive-html :as html]
-            [map-points-display.config :refer [config]])
+            [map-points-display.config :refer [config]]
+            [map-points-display.data.helpers :refer [parse-schedule]])
   (:import (java.io StringReader)))
 
 (def ^:private url-prefix
@@ -71,6 +72,41 @@
 
 ;; PoI show
 
+(html/defsnippet poi-schedule-wday "templates/show-poi.html"
+  [[:.schedule-row html/first-child] :> [:span html/first-of-type]]
+  [wday]
+  [html/root] (let [wday-short (->> wday
+                                    (take 3)
+                                    (apply str))]
+                (html/do->
+                 (html/set-attr :class "")
+                 (html/add-class (s/lower-case wday-short))
+                 (html/content wday-short))))
+
+(defn- normalize-timestr
+  [timestr]
+  (if (s/includes? timestr ":")
+    timestr
+    (str timestr ":00")))
+
+(html/defsnippet poi-schedule-row "templates/show-poi.html"
+  [[:.schedule-row html/first-child]]
+  [{:keys [dowfrom dowto timefrom timeto]}]
+  [:.wdays] (html/do->
+             (html/content "")
+             (html/append (poi-schedule-wday dowfrom))
+             (if dowto
+               (html/do->
+                (html/append "–")
+                (html/append (poi-schedule-wday dowto)))
+               identity))
+  [:.times] (html/content (str (normalize-timestr timefrom) "–" (normalize-timestr timeto))))
+
+(html/defsnippet poi-schedule "templates/show-poi.html"
+  [:#schedule]
+  [schedule]
+  [html/root] (html/content (map poi-schedule-row schedule)))
+
 (html/defsnippet poi-show-content "templates/show-poi.html"
   [:.layout :> :main]
   [ctxt]
@@ -82,7 +118,10 @@
                                       (filter (complement s/blank?)))]
                   (html/clone-for [n note-lines]
                                   (html/content n)))
-                (html/substitute "")))
+                (html/substitute ""))
+  [:#schedule] (if-let [schedule (:schedule ctxt)]
+                 (html/substitute (->> schedule parse-schedule poi-schedule))
+                 (html/substitute "")))
 
 (html/deftemplate poi-show "templates/_base.html"
   [ctxt]
