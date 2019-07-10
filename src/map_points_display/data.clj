@@ -70,12 +70,10 @@
       (merge hdr {"If-None-Match" etag})
       hdr)))
 
-(defn- postprocess-data
-  [data]
-  (let [records (data "records")]
-    (->> records
-         (map #(get % "fields"))
-         (map keywordize-keys))))
+(defn- postprocess-row
+  [data-row]
+  (let [{:keys [id fields]} data-row]
+    (merge fields {:id id})))
 
 (defn fetch-table-data
   [table-name]
@@ -85,7 +83,7 @@
                                              {:query-params {:filterByFormula formula}
                                               :etag etag})]
       (let [{data :data :as all} table-data
-            records (->> data :records (map :fields) (into []))]
+            records (->> data :records (map postprocess-row) (into []))]
         (merge all {:data records})))))
 
 (defn update-table-data
