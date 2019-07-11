@@ -76,9 +76,13 @@
   [ctxt]
   [:h1] (html/content (:name ctxt))
   [:#address] (html/content (:address ctxt))
-  [:#notes] (if-let [notes (:notes ctxt)]
-             (html/content notes)
-             (html/substitute "")))
+  [:.notes-p] (if-let [notes (:notes ctxt)]
+                (let [note-lines (->> notes
+                                      s/split-lines
+                                      (filter (complement s/blank?)))]
+                  (html/clone-for [n note-lines]
+                                  (html/content n)))
+                (html/substitute "")))
 
 (html/deftemplate poi-show "templates/_base.html"
   [ctxt]
