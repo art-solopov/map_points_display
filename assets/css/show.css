@@ -17,14 +17,10 @@
 }
 
 @media (min-width: 940px) {
-    .layout {
+    .layout.layout--show {
         display: flex;
         justify-content: space-between;
         align-items: stretch;
-
-        max-width: 1200px;
-        margin: 0 auto;
-        height: 100vh;
     }
 
     .app {

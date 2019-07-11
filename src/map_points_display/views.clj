@@ -46,7 +46,9 @@
 (html/deftemplate show-table "templates/_base.html"
   [ctxt]
   [:head] (html/append (show-header))
-  [:.layout] (html/content (show-content ctxt))
+  [:.layout] (html/do->
+              (html/add-class "layout--show")
+              (html/content (show-content ctxt)))
   [:body] (html/append (html/html [:script {:src (url-for (:js-url (config)))}]))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
