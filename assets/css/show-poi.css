@@ -4,6 +4,10 @@
     padding: 0.25em;
 }
 
+.map-image-container > img {
+    max-width: 100%;
+}
+
 .map-image-container .marker {
     width: 10px;
     height: 10px;

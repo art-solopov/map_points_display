@@ -3,7 +3,7 @@
             [environ.core :refer [env]]
             [net.cgrand.enlive-html :as html]
             [map-points-display.config :refer [config]]
-            [map-points-display.data.helpers :refer [parse-schedule]])
+            [map-points-display.data.helpers :refer [parse-schedule map-url]])
   (:import (java.io StringReader)))
 
 (def ^:private url-prefix
@@ -128,4 +128,5 @@
 (html/deftemplate poi-show "templates/_base.html"
   [ctxt]
   [:.layout] (html/content (poi-show-content ctxt))
+  [:.map-image-container :> :img] (html/set-attr :src (map-url ctxt))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
