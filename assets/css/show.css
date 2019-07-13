@@ -6,21 +6,21 @@
 .app {
     padding: 1em;
     box-sizing: border-box;
-}
 
-.app h1 {
-    margin: 0.5em 0;
+    & .h1 {
+        margin: 0.5em 0;
+    }
+
+    & .items li {
+        margin-bottom: 0.75em;
+    }
 }
 
 @media (min-width: 940px) {
-    .layout {
+    .layout.layout--show {
         display: flex;
         justify-content: space-between;
         align-items: stretch;
-
-        max-width: 1200px;
-        margin: 0 auto;
-        height: 100vh;
     }
 
     .app {

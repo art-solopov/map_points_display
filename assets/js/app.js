@@ -31,14 +31,6 @@ function makeMarker({name, lat, lon, category}) {
     return L.circleMarker([lat, lon], options).bindPopup(`${name} [${category}]`)
 }
 
-function genRandomId() {
-    let a = Math.ceil(Math.random() * 1000)
-    let b = Math.ceil(Math.random() * 10000)
-    let c = Math.ceil(Math.random() * 100)
-
-    return `${a}-${b}-${c}`
-}
-
 function main() {
     let dataPoints = getDataPoints()
     let baseLatLon = dataPoints.reduce(([accLat, accLon], dp) => {
@@ -57,13 +49,11 @@ function main() {
         dp.marker = makeMarker(dp.data)
         dp.marker.addTo(map)
 
-        // TODO: replace with an actual id
-        dp.id = genRandomId()
-        dp.el.dataset.elid = dp.id
+        dp.id = dp.el.id
 
         dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
         dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
-        dp.el.addEventListener('click', eventsProc.clickHandler)
+        dp.el.querySelector('.pan-link').addEventListener('click', eventsProc.clickHandler)
     })
 }
 

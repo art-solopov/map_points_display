@@ -4,19 +4,26 @@ const postcss = require('gulp-postcss')
 const mergeStreams = require('merge-stream')
 
 const postcssPlugins = {
-    fontFamilySystemUI: require('postcss-font-family-system-ui')
+    fontFamilySystemUI: require('postcss-font-family-system-ui'),
+    easyImport: require('postcss-easy-import'),
+    nesting: require('postcss-nesting'),
+    simpleVars: require('postcss-simple-vars'),
+    each: require('postcss-each'),
+    extend: require('postcss-extend')
 }
 
 function css() {
-    let deps = src(['node_modules/normalize.css/normalize.css'])
-
-    let assets =  src(['assets/css/*.css'])
+    let assets =  src(['assets/css/app.css'])
         .pipe(postcss([
+            postcssPlugins.easyImport(),
+            postcssPlugins.each(),
+            postcssPlugins.nesting(),
+            postcssPlugins.extend(),
+            postcssPlugins.simpleVars(),
             postcssPlugins.fontFamilySystemUI()
         ]))
 
-    return mergeStreams(assets, deps)
-        .pipe(concat('app.css'))
+    return assets.pipe(concat('app.css'))
         .pipe(dest('resources/public/css/'))
 }
 

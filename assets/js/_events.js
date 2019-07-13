@@ -3,7 +3,7 @@ var eventsProc = {
     map: null,
     mouseHandler(event) {
         let { target, type: evtype } = event;
-        let { elid } = target.dataset;
+        let elid = target.id;
         let dp = this.dataPoints.find(e => e.id === elid)
 
         let style = {};
@@ -13,7 +13,7 @@ var eventsProc = {
     },
     clickHandler(event) {
         let { target } = event;
-        target = target.parentElement
+        target = target.closest('li')
         let { lat, lon } = target.dataset
 
         event.preventDefault()
