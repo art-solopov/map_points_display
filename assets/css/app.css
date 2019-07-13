@@ -1,3 +1,9 @@
+@import "normalize.css";
+
+@import "./index.css";
+@import "./show.css";
+@import "./show-poi.css";
+
 body {
     font-size: 16px;
     font-family: 'DejaVu Sans', system-ui;
@@ -12,9 +18,9 @@ body {
 .link {
     padding: 1em;
     display: inline-block;
-}
 
-.link:hover,
-.link:focus {
-    background: #EEE;
+    &:hover,
+    &:focus {
+        background: #EEE;
+    }
 }

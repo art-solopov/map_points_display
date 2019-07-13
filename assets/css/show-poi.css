@@ -2,46 +2,62 @@
     position: relative;
     float: right;
     padding: 0.25em;
+
+    & > img {
+        max-width: 100%;
+    }
+
+    & .marker {
+        $marker_d: 10px;
+
+        width: $marker_d;
+        height: $marker_d;
+        background: #D00;
+        border-radius: 50%;
+
+        position: absolute;
+        top: calc(50% - $marker_d / 2);
+        left: calc(50% - $marker_d / 2);
+    }
 }
 
-.map-image-container > img {
-    max-width: 100%;
+%dow-display {
+    display: inline-block;
+    padding: 0.25em;
 }
 
-.map-image-container .marker {
-    width: 10px;
-    height: 10px;
-    background: #D00;
-    border-radius: 50%;
-
-    position: absolute;
-    top: calc(50% - 5px);
-    left: calc(50% - 5px);
+%dow-wday-display {
+    background: black;
+    color: white;
 }
 
 .schedule {
     margin-bottom: 1em;
-}
 
-.schedule .mon,
-.schedule .tue,
-.schedule .wed,
-.schedule .thu,
-.schedule .fri,
-.schedule .sat,
-.schedule .sun {
-    display: inline-block;
-    background: black;
-    color: white;
-    padding: 0.25em;
-}
+    @each $dow in mon, tue, wed, thu, fri, sat, sun {
+        & .$(dow) {
+            @extend %dow-display;
+        }
+    }
 
-.schedule .sat {
-    background: #fa0;
-    color: black;
-}
+    @each $dow in mon, tue, wed, thu {
+        & .$(dow) {
+            @extend %dow-wday-display;
+        }
+    }
 
-.schedule .sun {
-    background: #ffa;
-    color: black;
+    & .fri {
+        background: navy;
+        color: white;
+    }
+
+    & .sat {
+        background: #fa0;
+        color: black;
+    }
+
+    & .sun {
+        background: #ffa;
+        color: black;
+    }
 }
