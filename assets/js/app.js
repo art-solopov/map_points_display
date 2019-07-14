@@ -24,11 +24,18 @@ function getBounds(dataPoints) {
     return [[minLat, minLon], [maxLat, maxLon]]
 }
 
-function makeMarker({name, lat, lon, category}) {
-    let options = Object.assign({fillColor: MARKER_COLORS[category]},
-                                BASE_MARKER_OPTS)
+const MapIcon = L.Icon.extend({
+    options: {
+        iconSize: [34, 51],
+        iconAnchor: [34 / 2, 51],
+        popupAnchor: [0, -30]
+    }
+})
 
-    return L.circleMarker([lat, lon], options).bindPopup(`${name} [${category}]`)
+function makeMarker({name, lat, lon, category}) {
+    var icon = new MapIcon({iconUrl: "/icons/" + category + ".png"})
+
+    return L.marker([lat, lon], {icon: icon}).bindPopup(`${name} (${category})`)
 }
 
 function main() {
@@ -51,8 +58,9 @@ function main() {
 
         dp.id = dp.el.id
 
-        dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
-        dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
+        // TODO: think about marker hover events
+        // dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
+        // dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
         dp.el.querySelector('.pan-link').addEventListener('click', eventsProc.clickHandler)
     })
 }

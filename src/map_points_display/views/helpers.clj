@@ -10,7 +10,8 @@
 
 (def acknowledgements
   ["© Artemiy Solopov, 2019"
-   "All map data by OpenStreetMaps"])
+   "All map data by OpenStreetMaps"
+   "Icons are based on icons from <a href=\"https://icomoon.io/\">Icomoon</a>"])
 
 (defmacro template-from-base
   [name & body]
@@ -18,6 +19,6 @@
      [~(quote ctxt)]
      [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css"))
      [:footer#main_footer :> :p] (html/clone-for [~'ack acknowledgements]
-                                                 (html/content ~'ack))
+                                                 (html/html-content ~'ack))
      ~@body))
 
