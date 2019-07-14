@@ -3,21 +3,18 @@
     float: right;
     padding: 0.25em;
 
-    & > img {
+    & > img.map-image {
         max-width: 100%;
     }
 
-    & .marker {
-        $marker_d: 10px;
-
-        width: $marker_d;
-        height: $marker_d;
-        background: #D00;
-        border-radius: 50%;
-
+    & > img.marker {
         position: absolute;
-        top: calc(50% - $marker_d / 2);
-        left: calc(50% - $marker_d / 2);
+        top: 50%;
+        left: 50%;
+
+        transform-origin: bottom center;
+        transform: translate(-50%, -100%) scale(0.7);
+
     }
 }
 

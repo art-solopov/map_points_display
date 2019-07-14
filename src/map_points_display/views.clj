@@ -120,4 +120,5 @@
 (template-from-base
  poi-show
  [:.layout] (html/content (poi-show-content ctxt))
- [:.map-image-container :> :img] (html/set-attr :src (map-url ctxt)))
+ [:.map-image-container :> :img#map_image] (html/set-attr :src (map-url ctxt))
+ [:.map-image-container :> :img#map_marker] (html/set-attr :src (str "/icons/" (:type ctxt) ".png")))
