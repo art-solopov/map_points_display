@@ -2,7 +2,7 @@
   (:require [clojure.string :as s]
             [net.cgrand.enlive-html :as html]
             [map-points-display.config :refer [config]]
-            [map-points-display.views.helpers :refer [template-from-base url-for]]
+            [map-points-display.views.helpers :refer [template-from-base url-for map-tiles-base-url map-tiles-attribution]]
             [map-points-display.data.helpers :refer [parse-schedule map-url]])
   (:import (java.io StringReader)))
 
@@ -34,6 +34,9 @@
 (html/defsnippet show-content "templates/show.html"
   #{[:#map] [:#app]}
   [ctxt]
+  [:#map] (html/do->
+           (html/set-attr :data-map-url map-tiles-base-url)
+           (html/set-attr :data-map-attribution map-tiles-attribution))
   [:#app :h1] (html/content (:message ctxt))
   [:#app :.places] (html/content (map #(apply group (:table-id ctxt) %) (:groups ctxt))))
 

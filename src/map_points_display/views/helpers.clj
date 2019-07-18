@@ -22,3 +22,8 @@
                                                  (html/html-content ~'ack))
      ~@body))
 
+(def map-tiles-base-url
+  "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png")
+
+(def map-tiles-attribution
+  "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>")

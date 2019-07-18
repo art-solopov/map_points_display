@@ -39,6 +39,7 @@ function makeMarker({name, lat, lon, category}) {
 }
 
 function main() {
+    let mapEl = document.getElementById('map')
     let dataPoints = getDataPoints()
     let baseLatLon = dataPoints.reduce(([accLat, accLon], dp) => {
         let {lat, lon} = dp.data
@@ -46,8 +47,9 @@ function main() {
     }, [0, 0]).map(e => e / dataPoints.length)
 
     let bounds = getBounds(dataPoints)
-    let map = L.map('map').fitBounds(bounds)
-    L.tileLayer(MAP_URL, {attribution: MAP_ATTRIBUTION}).addTo(map)
+    let {mapUrl, mapAttribution} = mapEl.dataset
+    let map = L.map(mapEl).fitBounds(bounds)
+    L.tileLayer(mapUrl, {attribution: mapAttribution}).addTo(map)
 
     eventsProc.dataPoints = dataPoints
     eventsProc.map = map
