@@ -35,7 +35,7 @@
   #{[:#map] [:#app]}
   [ctxt]
   [:#map] (html/do->
-           (html/set-attr :data-map-url map-tiles-base-url)
+           (html/set-attr :data-map-url (map-tiles-base-url))
            (html/set-attr :data-map-attribution map-tiles-attribution))
   [:#app :h1] (html/content (:message ctxt))
   [:#app :.places] (html/content (map #(apply group (:table-id ctxt) %) (:groups ctxt))))

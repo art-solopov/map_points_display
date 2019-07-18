@@ -1,6 +1,7 @@
 (ns map-points-display.views.helpers
   (:require [net.cgrand.enlive-html :as html]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [map-points-display.config :refer [secrets]]))
 
 (def ^:private url-prefix
   (env :url-prefix))
@@ -22,8 +23,10 @@
                                                  (html/html-content ~'ack))
      ~@body))
 
-(def map-tiles-base-url
-  "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png")
+(defn map-tiles-base-url []
+  (str "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}"
+       "?access_token="
+       (:mapbox-api-key (secrets))))
 
 (def map-tiles-attribution
-  "<a href=\"https://wikimediafoundation.org/wiki/Maps_Terms_of_Use\">Wikimedia</a>")
+  "© <a href=\"https://www.mapbox.com/about/maps/\">Mapbox</a> © <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> <strong><a href=\"https://www.mapbox.com/map-feedback/\" target=\"_blank\">Improve this map</a></strong>")
