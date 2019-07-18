@@ -1,7 +1,10 @@
 .map-image-container {
+    $padding: 0.25em;
+
     position: relative;
     float: right;
-    padding: 0.25em;
+
+    padding: $padding;
 
     & > img.map-image {
         max-width: 100%;
@@ -15,6 +18,11 @@
         transform-origin: bottom center;
         transform: translate(-50%, -100%) scale(0.7);
 
+    }
+
+    & .attribution {
+        font-size: 75%;
+        text-align: right;
     }
 }
 
