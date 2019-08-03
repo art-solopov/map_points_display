@@ -5,11 +5,6 @@ var eventsProc = {
         let { target, type: evtype } = event;
         let elid = target.id;
         let dp = this.dataPoints.find(e => e.id === elid)
-
-        let style = {};
-        if(evtype == 'mouseenter') { style.color = MARKER_HOVER_BORDER }
-        else { style.color = MARKER_DEFAULT_BORDER }
-        dp.marker.setStyle(style)
     },
     clickHandler(event) {
         let { target } = event;

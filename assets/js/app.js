@@ -24,14 +24,22 @@ function getBounds(dataPoints) {
     return [[minLat, minLon], [maxLat, maxLon]]
 }
 
-function makeMarker({name, lat, lon, category}) {
-    let options = Object.assign({fillColor: MARKER_COLORS[category]},
-                                BASE_MARKER_OPTS)
+const MapIcon = L.Icon.extend({
+    options: {
+        iconSize: [34, 51],
+        iconAnchor: [34 / 2, 51],
+        popupAnchor: [0, -30]
+    }
+})
 
-    return L.circleMarker([lat, lon], options).bindPopup(`${name} [${category}]`)
+function makeMarker({name, lat, lon, category}) {
+    var icon = new MapIcon({iconUrl: "/icons/" + category + ".png"})
+
+    return L.marker([lat, lon], {icon: icon}).bindPopup(`${name} (${category})`)
 }
 
 function main() {
+    let mapEl = document.getElementById('map')
     let dataPoints = getDataPoints()
     let baseLatLon = dataPoints.reduce(([accLat, accLon], dp) => {
         let {lat, lon} = dp.data
@@ -39,8 +47,9 @@ function main() {
     }, [0, 0]).map(e => e / dataPoints.length)
 
     let bounds = getBounds(dataPoints)
-    let map = L.map('map').fitBounds(bounds)
-    L.tileLayer(MAP_URL, {attribution: MAP_ATTRIBUTION}).addTo(map)
+    let {mapUrl, mapAttribution} = mapEl.dataset
+    let map = L.map(mapEl).fitBounds(bounds)
+    L.tileLayer(mapUrl, {attribution: mapAttribution}).addTo(map)
 
     eventsProc.dataPoints = dataPoints
     eventsProc.map = map
@@ -51,8 +60,9 @@ function main() {
 
         dp.id = dp.el.id
 
-        dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
-        dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
+        // TODO: think about marker hover events
+        // dp.el.addEventListener('mouseenter', eventsProc.mouseHandler)
+        // dp.el.addEventListener('mouseleave', eventsProc.mouseHandler)
         dp.el.querySelector('.pan-link').addEventListener('click', eventsProc.clickHandler)
     })
 }

@@ -1,10 +1,21 @@
 .map {
     min-height: 60vh;
     box-sizing: border-box;
+
+    & .extra-attribution {
+        position: absolute;
+        bottom: 0;
+        left: 5px;
+        height: 24px;
+        width: 78px;
+
+        background-image: url(/vendor/mapbox/logo.svg);
+        background-repeat: no-repeat;
+        z-index: 500;
+    }
 }
 
 .app {
-    padding: 1em;
     box-sizing: border-box;
 
     & .h1 {
@@ -25,7 +36,7 @@
 
     .app {
         flex: 0 1 26rem;
-        max-height: 100%;
+        max-height: 90vh;
         overflow-y: scroll;
         order: 0;
     }

@@ -1,16 +1,10 @@
 (ns map-points-display.views
   (:require [clojure.string :as s]
-            [environ.core :refer [env]]
             [net.cgrand.enlive-html :as html]
             [map-points-display.config :refer [config]]
+            [map-points-display.views.helpers :refer [template-from-base url-for map-tiles-base-url map-tiles-attribution]]
             [map-points-display.data.helpers :refer [parse-schedule map-url]])
   (:import (java.io StringReader)))
-
-(def ^:private url-prefix
-  (env :url-prefix))
-
-(defn- url-for [path]
-  (str url-prefix path))
 
 ;; Showing data table
 
@@ -40,17 +34,19 @@
 (html/defsnippet show-content "templates/show.html"
   #{[:#map] [:#app]}
   [ctxt]
+  [:#map] (html/do->
+           (html/set-attr :data-map-url (map-tiles-base-url))
+           (html/set-attr :data-map-attribution map-tiles-attribution))
   [:#app :h1] (html/content (:message ctxt))
   [:#app :.places] (html/content (map #(apply group (:table-id ctxt) %) (:groups ctxt))))
 
-(html/deftemplate show-table "templates/_base.html"
-  [ctxt]
-  [:head] (html/append (show-header))
-  [:.layout] (html/do->
-              (html/add-class "layout--show")
-              (html/content (show-content ctxt)))
-  [:body] (html/append (html/html [:script {:src (url-for (:js-url (config)))}]))
-  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
+(template-from-base
+ show-table
+ [:head] (html/append (show-header))
+ [:.layout] (html/do->
+             (html/add-class "layout--show")
+             (html/content (show-content ctxt)))
+ [:body] (html/append (html/html [:script {:src (url-for (:js-url (config)))}])))
 
 ;; Data tables list
 
@@ -67,10 +63,9 @@
   [ctxt]
   [:ul#data_tables] (html/content (map data-tables-item (:tables ctxt))))
 
-(html/deftemplate index-table "templates/_base.html"
-  [ctxt]
-  [:.layout] (html/content (data-tables-list ctxt))
-  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
+(template-from-base
+ index-table
+ [:.layout] (html/content (data-tables-list ctxt)))
 
 ;; PoI show
 
@@ -125,8 +120,8 @@
                  (html/substitute (->> schedule parse-schedule poi-schedule))
                  (html/substitute "")))
 
-(html/deftemplate poi-show "templates/_base.html"
-  [ctxt]
-  [:.layout] (html/content (poi-show-content ctxt))
-  [:.map-image-container :> :img] (html/set-attr :src (map-url ctxt))
-  [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
+(template-from-base
+ poi-show
+ [:.layout] (html/content (poi-show-content ctxt))
+ [:.map-image-container :> :img#map_image] (html/set-attr :src (map-url ctxt))
+ [:.map-image-container :> :img#map_marker] (html/set-attr :src (str "/icons/" (:type ctxt) ".png")))
