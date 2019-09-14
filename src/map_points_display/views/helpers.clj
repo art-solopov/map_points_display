@@ -24,7 +24,7 @@
      ~@body))
 
 (defn map-tiles-base-url []
-  (str "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}"
+  (str "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}"
        "?access_token="
        (:mapbox-api-key (secrets))))
 
