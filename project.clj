@@ -23,7 +23,9 @@
                  [org.slf4j/slf4j-simple "1.7.29"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]]
-  :aliases {"runserver" ["trampoline" "run"]}
+  :aliases {"runserver" ["trampoline" "run"]
+            "db:migrate" ["run" "-m" "map-points-display.tasks.db/migrate"]
+            "db:rollback" ["run" "-m" "map-points-display.tasks.db/rollback"]}
   :target-path "target/%s"
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
