@@ -7,19 +7,19 @@
 (def ^:const base-url "https://api.airtable.com/v0/")
 
 (defn- airtable-db []
-  (:airtable-database (secrets)))
+  (:airtable-database @secrets))
 
 (defn- airtable-url
   [path]
   (str base-url (airtable-db) path))
 
 (defn- auth-headers []
-  (let [{api-key :airtable-api-key} (secrets)]
+  (let [{api-key :airtable-api-key} @secrets]
     {"Authorization" (str "Bearer " api-key)}))
 
 (defn- fetch-headers
   [etag]
-  (let [{api-key :airtable-api-key} (secrets)
+  (let [{api-key :airtable-api-key} @secrets
         headers {"Authorization" (str "Bearer " api-key)
                  "If-None-Match" etag}]
     (into {} (filter val headers))))

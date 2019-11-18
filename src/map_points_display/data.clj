@@ -12,7 +12,7 @@
             [map-points-display.utils :refer [path-join]]))
 
 (defmacro wcar* [& body]
-  `(wcar (:redis (config)) ~@body))
+  `(wcar (@config :redis) ~@body))
 
 ;; Table list
 
@@ -71,7 +71,7 @@
 
 (defn- table-request-headers
   [table-name]
-  (let [{api-key :airtable-api-key} (secrets)
+  (let [{api-key :airtable-api-key} @secrets
         hdr {"Authorization" (str "Bearer " api-key)}]
     (if-let [{etag :etag} (wcar* (car/get (meta-key table-name)))]
       (merge hdr {"If-None-Match" etag})

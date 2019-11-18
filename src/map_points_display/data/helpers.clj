@@ -28,7 +28,7 @@
 (defn map-url
   [{:keys [lat lon]}]
   (let [[w h] mapbox-img-size
-        token (:mapbox-api-key (secrets))]
+        token (:mapbox-api-key @secrets)]
     (-> mapbox-static-map-base-url
         (s/replace "$lon" (str lon))
         (s/replace "$lat" (str lat))

@@ -46,7 +46,7 @@
  [:.layout] (html/do->
              (html/add-class "layout--show")
              (html/content (show-content ctxt)))
- [:body] (html/append (html/html [:script {:src (url-for (:js-url (config)))}])))
+ [:body] (html/append (html/html [:script {:src (url-for (:js-url @config))}])))
 
 ;; Data tables list
 
