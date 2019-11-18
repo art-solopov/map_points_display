@@ -3,6 +3,7 @@
             [mount.core :as mount]
             [mount-up.core :as mu]
             [map-points-display.http-server]
+            [map-points-display.data.config]
             [map-points-display.data.periodic :as data-p])
   (:gen-class))
 

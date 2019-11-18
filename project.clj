@@ -12,6 +12,7 @@
                  [enlive "1.1.6"]
                  [funcool/clojure.jdbc "0.9.0"]
                  [org.postgresql/postgresql "42.2.8"]
+                 [hikari-cp "2.9.0"]
                  [ragtime "0.8.0"]
                  [org.clojure/data.json "0.2.6"]
                  [com.taoensso/carmine "2.19.1"]
