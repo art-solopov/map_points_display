@@ -27,4 +27,4 @@
   (.shutdownNow @executor)
   (reset! executor nil))
 
-(defstate periodic :start (init) :stop (shutdown))
+;; (defstate periodic :start (init) :stop (shutdown))
