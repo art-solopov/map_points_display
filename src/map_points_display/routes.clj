@@ -8,13 +8,13 @@
 
 (defroutes app
   (GET "/" []
-       (let [tables (data/tables-list)]
-         (views/index-table {:tables tables})))
-  (GET "/data/:data-table" [data-table]
-       (let [groups (data/load-data data-table)]
-         (views/show-table {:groups groups :message data-table :table-id data-table})))
-  (GET "/data/:data-table/:id" [data-table id]
-       (if-let [poi (data/load-poi data-table id)]
+       (let [trips (data/trips-list)]
+         (views/index-table {:trips trips})))
+  (GET "/trip/:trip-name" [trip-name]
+       (let [groups (data/load-trip-points trip-name)]
+         (views/show-table {:groups groups :title trip-name})))
+  (GET "/trip-point/:id" [id]
+       (if-let [poi (data/load-point (Long/parseLong id))]
          (views/poi-show poi)
          {:status 404 :body "Not found"}))
   (GET "/templates/:filename" [filename]

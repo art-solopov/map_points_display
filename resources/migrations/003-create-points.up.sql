@@ -6,7 +6,7 @@ CREATE TABLE points (
        coordinates point NOT NULL,
        type VARCHAR NOT NULL,
        notes TEXT,
-       schedule json
+       schedule TEXT
 );
 --;;
 CREATE INDEX points_trip_id ON points (trip_id);

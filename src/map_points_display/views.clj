@@ -10,22 +10,22 @@
 
 (html/defsnippet group-item "templates/show.html"
   [:section.group :ul.items :> [:li html/first-child]]
-  [table-id item]
+  [{:keys [lat lon type id name address]}]
   [:li] (html/do->
-         (html/set-attr :data-lat (:lat item))
-         (html/set-attr :data-lon (:lon item))
-         (html/set-attr :data-category (:type item))
-         (html/set-attr :id (:id item)))
-  [:.item-name] (html/content (:name item))
-  [:.item-address] (html/content (:address item))
-  [:a.more-link] (html/set-attr :href (str "/data/" table-id "/" (:id item))))
+         (html/set-attr :data-lat lat)
+         (html/set-attr :data-lon lon)
+         (html/set-attr :data-category type)
+         (html/set-attr :id id))
+  [:.item-name] (html/content name)
+  [:.item-address] (html/content address)
+  [:a.more-link] (html/set-attr :href (str "/trip-point/" id)))
 
 (html/defsnippet group "templates/show.html"
   [:section.group]
-  [table-id name items]
+  [name items]
   [html/root] (html/set-attr :data-name name)
   [:h2.group-type] (html/content (s/capitalize name))
-  [:ul.items] (html/content (map #(group-item table-id %) items)))
+  [:ul.items] (html/content (map group-item items)))
 
 (html/defsnippet show-header "templates/show.html"
   [:head #{[[:link (html/but html/first-of-type)]] [:script]}]
@@ -37,8 +37,8 @@
   [:#map] (html/do->
            (html/set-attr :data-map-url (map-tiles-base-url))
            (html/set-attr :data-map-attribution map-tiles-attribution))
-  [:#app :h1] (html/content (:message ctxt))
-  [:#app :.places] (html/content (map #(apply group (:table-id ctxt) %) (:groups ctxt))))
+  [:#app :h1] (html/content (:title ctxt))
+  [:#app :.places] (html/content (map #(apply group %) (:groups ctxt))))
 
 (template-from-base
  show-table
@@ -52,16 +52,16 @@
 
 (html/defsnippet data-tables-item "templates/index.html"
   [:ul#data_tables :> [:li.data-table html/first-child]]
-  [item]
+  [{:keys [id name]}]
   [:li :> :a] (html/do->
-               (html/content item)
-               (html/set-attr :href (->> item (str "/data/") url-for)))
+               (html/content name)
+               (html/set-attr :href (->> name (str "/trip/") url-for)))
   [:head [:link (html/attr= :rel "stylesheet") html/first-of-type]] (html/set-attr :href (url-for "/css/app.css")))
 
 (html/defsnippet data-tables-list "templates/index.html"
   [:.layout :> :main]
   [ctxt]
-  [:ul#data_tables] (html/content (map data-tables-item (:tables ctxt))))
+  [:ul#data_tables] (html/content (map data-tables-item (:trips ctxt))))
 
 (template-from-base
  index-table

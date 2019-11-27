@@ -1,7 +1,8 @@
 (ns map-points-display.data.periodic
   (:require [clojure.tools.logging :as log]
             [mount.core :refer [defstate]]
-            ;; [map-points-display.data :refer [tables-list update-tables-list update-table-data]])
+            ;; [map-points-display.data :refer [tables-list update-tables-list update-table-data]]
+            )
   (:import [java.util.concurrent ScheduledThreadPoolExecutor TimeUnit]))
 
 (defonce executor (atom nil))
