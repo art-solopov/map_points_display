@@ -12,8 +12,9 @@
                  [clj-http "3.10.0"]
                  [cheshire "5.8.1"]
                  [environ "1.1.0"]
+                 [ring-logger "1.0.1"]
                  [org.clojure/tools.logging "0.4.1"]
-                 [ch.qos.logback/logback-classic "1.2.3"]]
+                 [org.slf4j/slf4j-simple "1.7.29"]]
   :main ^:skip-aot map-points-display.core
   :plugins [[lein-environ "1.1.0"]
             [lein-ring "0.12.5"]]

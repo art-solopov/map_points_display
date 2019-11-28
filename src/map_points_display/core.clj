@@ -5,6 +5,7 @@
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
+            [ring.logger :as logger]
             [map-points-display.routes :as routes]
             [map-points-display.data.periodic :as data-p]
             [environ.core :refer [env]])
@@ -29,4 +30,5 @@
       wrap-set-ref-header
       (wrap-resource "public")
       wrap-content-type
-      wrap-not-modified))
+      wrap-not-modified
+      logger/wrap-with-logger))
