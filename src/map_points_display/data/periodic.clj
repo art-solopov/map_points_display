@@ -1,9 +1,10 @@
 (ns map-points-display.data.periodic
   (:require [clojure.tools.logging :as log]
+            [mount.core :refer [defstate]]
             [map-points-display.data :refer [tables-list update-tables-list update-table-data]])
   (:import [java.util.concurrent ScheduledThreadPoolExecutor TimeUnit]))
 
-(def executor (atom nil))
+(defonce executor (atom nil))
 
 (defn update-tables
   []
@@ -25,3 +26,5 @@
   (log/debug ("Shutting down executor"))
   (.shutdownNow @executor)
   (reset! executor nil))
+
+(defstate periodic :start (init) :stop (shutdown))

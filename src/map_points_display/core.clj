@@ -1,34 +1,15 @@
 (ns map-points-display.core
-  (:require [ring.adapter.jetty :as rj]
-            [ring.util.response :refer [header]]
-            [ring.middleware.resource :refer [wrap-resource]]
-            [ring.middleware.file :refer [wrap-file]]
-            [ring.middleware.content-type :refer [wrap-content-type]]
-            [ring.middleware.not-modified :refer [wrap-not-modified]]
-            [ring.logger :as logger]
-            [map-points-display.routes :as routes]
-            [map-points-display.data.periodic :as data-p]
-            [environ.core :refer [env]])
+  (:require [environ.core :refer [env]]
+            [mount.core :as mount]
+            [mount-up.core :as mu]
+            [map-points-display.http-server]
+            [map-points-display.data.periodic :as data-p])
   (:gen-class))
 
-(defn init
-  []
-  (data-p/init))
+(mu/on-upndown :info mu/log :before)
 
-(defn destroy
-  []
-  (data-p/shutdown))
-
-(defn- wrap-set-ref-header
-  [handler]
-  (fn [request]
-    (let [response (handler request)]
-      (header response "Referrer-Policy" "origin-when-cross-origin"))))
-
-(def handler
-  (-> routes/app
-      wrap-set-ref-header
-      (wrap-resource "public")
-      wrap-content-type
-      wrap-not-modified
-      logger/wrap-with-logger))
+(defn -main
+  [& args]
+  (-> (Runtime/getRuntime)
+      (.addShutdownHook (Thread. mount/stop)))
+  (mount/start))
