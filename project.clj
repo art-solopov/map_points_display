@@ -24,4 +24,6 @@
   :target-path "target/%s"
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
-             :dev {:env {:app-env "development"}}})
+             :dev {:env {:app-env "development"}}
+             :repl {:source-paths ["dev"]
+                    :jvm-opts ["-Dorg.slf4j.simpleLogger.defaultLogLevel=error"]}})
