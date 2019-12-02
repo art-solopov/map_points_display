@@ -4,4 +4,5 @@
  :extra-config "/data/config.edn"
  :redis {:spec {:host "redis"}}
  :secrets-file "/data/secrets.edn"
+ :port 8080
 }

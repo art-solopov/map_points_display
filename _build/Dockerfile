@@ -1,7 +1,10 @@
-FROM jetty:9-jre11
+FROM openjdk:11
 
 ENV APP_ENV production
 ENV DATA_PATH /data
 VOLUME ["/data"]
 
-COPY map_points_display.war /var/lib/jetty/webapps/ROOT.war
+WORKDIR "/app"
+COPY map_points_display.jar /app
+
+CMD ["java", "-jar", "map_points_display.jar"]

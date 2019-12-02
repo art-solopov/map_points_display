@@ -8,6 +8,7 @@
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.logger :as logger]
             [clojure.tools.logging :as log]
+            [map-points-display.config :refer [config]]
             [map-points-display.routes :as routes]))
 
 (defonce -server (atom nil))
@@ -28,10 +29,9 @@
 
 (defn start-server
   []
-  ;; TODO add configuration
-  (let [port 8080]
+  (let [port (:port @config)]
     (log/info "Starting server on port" port)
-    (reset! -server (run-server handler {:port 8080}))))
+    (reset! -server (run-server handler {:port port}))))
 
 (defn stop-server
   []

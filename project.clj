@@ -1,4 +1,4 @@
-(defproject map_points_display "0.1.0"
+(defproject map_points_display "0.9.0"
   :description "A simple web app that displays predefined POI on the map"
   :url "https://github.com/art-solopov/map_points_display"
   :license {:name "Eclipse Public License"
@@ -25,5 +25,4 @@
   :profiles {:production {:env {:app-env "production"}}
              :uberjar [:production {:aot :all}]
              :dev {:env {:app-env "development"}}
-             :repl {:source-paths ["dev"]
-                    :jvm-opts ["-Dorg.slf4j.simpleLogger.defaultLogLevel=error"]}})
+             :repl {:jvm-opts ["-Dorg.slf4j.simpleLogger.defaultLogLevel=error"]}})
