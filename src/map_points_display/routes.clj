@@ -4,18 +4,19 @@
             [compojure.route :as route]
             [ring.util.response :refer [resource-response]]
             [map-points-display.views :as views]
+            [map-points-display.views-bak :as views-b]
             [map-points-display.data :as data]))
 
 (defroutes app
   (GET "/" []
        (let [trips (data/trips-list)]
-         (views/index-table {:trips trips})))
+         (views/trips-list {:trips trips})))
   (GET "/trip/:trip-name" [trip-name]
        (let [groups (data/load-trip-points trip-name)]
-         (views/show-table {:groups groups :title trip-name})))
+         (views-b/show-table {:groups groups :title trip-name})))
   (GET "/trip-point/:id" [id]
        (if-let [poi (data/load-point (Long/parseLong id))]
-         (views/poi-show poi)
+         (views-b/poi-show poi)
          {:status 404 :body "Not found"}))
   (GET "/templates/:filename" [filename]
        (resource-response filename {:root "templates"}))

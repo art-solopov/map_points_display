@@ -10,6 +10,7 @@
                  [http-kit "2.3.0"]
                  [compojure "1.5.1"]
                  [enlive "1.1.6"]
+                 [hiccup "1.0.5"]
                  [funcool/clojure.jdbc "0.9.0"]
                  [org.postgresql/postgresql "42.2.8"]
                  [hikari-cp "2.9.0"]

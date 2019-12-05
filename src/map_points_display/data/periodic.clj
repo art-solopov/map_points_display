@@ -25,7 +25,7 @@
 
 (defn shutdown
   []
-  (log/debug ("Shutting down executor"))
+  (log/debug "Shutting down executor")
   (.shutdownNow @executor)
   (reset! executor nil))
 
