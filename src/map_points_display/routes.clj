@@ -13,7 +13,7 @@
          (views/trips-list {:trips trips})))
   (GET "/trip/:trip-name" [trip-name]
        (let [groups (data/load-trip-points trip-name)]
-         (views-b/show-table {:groups groups :title trip-name})))
+         (views/show-trip {:groups groups :name trip-name})))
   (GET "/trip-point/:id" [id]
        (if-let [poi (data/load-point (Long/parseLong id))]
          (views-b/poi-show poi)
