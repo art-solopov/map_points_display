@@ -1,5 +1,6 @@
 (ns map-points-display.views.helpers
-  (:require [net.cgrand.enlive-html :as html]
+  (:require [clojure.string :as s]
+            [net.cgrand.enlive-html :as html]
             [environ.core :refer [env]]
             [map-points-display.config :refer [secrets]]))
 
@@ -27,6 +28,12 @@
   (str "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}"
        "?access_token="
        (:mapbox-api-key @secrets)))
+
+(defn normalize-timestr
+  [timestr]
+  (if (s/includes? timestr ":")
+    timestr
+    (str timestr ":00")))
 
 (def map-tiles-attribution
   "© <a href=\"https://www.mapbox.com/about/maps/\">Mapbox</a> © <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> <strong><a href=\"https://www.mapbox.com/map-feedback/\" target=\"_blank\">Improve this map</a></strong>")

@@ -16,7 +16,7 @@
          (views/show-trip {:groups groups :name trip-name})))
   (GET "/trip-point/:id" [id]
        (if-let [poi (data/load-point (Long/parseLong id))]
-         (views-b/poi-show poi)
+         (views/show-point poi)
          {:status 404 :body "Not found"}))
   (GET "/templates/:filename" [filename]
        (resource-response filename {:root "templates"}))
