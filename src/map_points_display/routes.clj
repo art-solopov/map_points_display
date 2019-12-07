@@ -6,18 +6,19 @@
             [map-points-display.views.trips-list :as v-trips-list]
             [map-points-display.views.show-trip :as v-show-trip]
             [map-points-display.views.show-point :as v-show-point]
+            [map-points-display.views :refer [->HiccupView]]
             [map-points-display.data :as data]))
 
 (defroutes app
   (GET "/" []
        (let [trips (data/trips-list)]
-         (v-trips-list/render {:trips trips})))
+         (->HiccupView :trips-list {:trips trips})))
   (GET "/trip/:trip-name" [trip-name]
        (let [groups (data/load-trip-points trip-name)]
-         (v-show-trip/render {:groups groups :name trip-name})))
+         (->HiccupView :show-trip {:groups groups :name trip-name})))
   (GET "/trip-point/:id" [id]
        (if-let [poi (data/load-point (Long/parseLong id))]
-         (v-show-point/render poi)
+         (->HiccupView :show-point poi)
          {:status 404 :body "Not found"}))
   (GET "/templates/:filename" [filename]
        (resource-response filename {:root "templates"}))

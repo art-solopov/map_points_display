@@ -1,7 +1,6 @@
 (ns map-points-display.views.show-trip
   (:require [clojure.string :as s]
             [hiccup.element :refer [link-to]]
-            [map-points-display.views :refer [layout]]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution]]
             [map-points-display.config :refer [config]]))
 
@@ -39,6 +38,6 @@
                     [:h1 name]
                     [:article.places
                      (map #(apply show-trip--group %) groups)]])]
-    (layout {:main main :layout-class "layout--show"
-             :extra-head show-trip--extra-head
-             :extra-body [:script {:src (:js-url @config)}]})))
+    {:main main :layout-class "layout--show"
+     :extra-head show-trip--extra-head
+     :extra-body [:script {:src (:js-url @config)}]}))

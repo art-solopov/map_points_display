@@ -2,9 +2,7 @@
   (:require [clojure.string :as s]
             [hiccup.element :refer [image]]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
-            [map-points-display.data.helpers :refer [parse-schedule map-url]]
-            [map-points-display.views :refer [layout]]
-            ))
+            [map-points-display.data.helpers :refer [parse-schedule map-url]]))
 
 (defn- show-point--map-image
   [point]
@@ -47,4 +45,4 @@
                [:p#address address]]
               (when-not (s/blank? notes) [:section (show-point--notes notes)])
               (when-not (s/blank? schedule) [:table.schedule (map show-point--schedule-row (parse-schedule schedule))])]]
-    (layout {:main main})))
+    {:main main}))
