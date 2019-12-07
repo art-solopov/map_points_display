@@ -2,12 +2,9 @@
   (:require [clojure.string :as s]
             [clojure.walk :refer [keywordize-keys]]
             [clojure.java.io :as io]
-            [clojure.data.json :as json]
             [clojure.tools.logging :as log]
             [jdbc.core :as jdbc]
             [environ.core :refer [env]]
-            [clj-http.client :as http]
-            [taoensso.carmine :as car :refer [wcar]]
             [map-points-display.config :refer [config secrets]]
             [map-points-display.utils :refer [path-join]]
             [map-points-display.data.config :refer [data-source]]))

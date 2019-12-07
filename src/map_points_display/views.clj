@@ -4,7 +4,7 @@
             [hiccup.page :refer [html5]]
             [hiccup.element :refer [link-to javascript-tag unordered-list image]]
             [map-points-display.config :refer [config]]
-            [map-points-display.views.helpers :refer [url-for map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
+            [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
             [map-points-display.data.helpers :refer [parse-schedule map-url]])
   (:import (java.io StringReader)))
 
@@ -14,7 +14,7 @@
           [:meta {:name "viewport" :content "width=device-width; initial-scale=1"}]
           [:meta {:charset "UTF-8"}]
           [:title "Map points display"]
-          [:link {:rel "stylesheet" :href (url-for "/css/app.css")}]
+          [:link {:rel "stylesheet" :href "/css/app.css"}]
           extra-head
           ]
          [:body
@@ -26,9 +26,7 @@
 
 (defn- trips-list--item
   [{:keys [name]}]
-  (let [href (->> name
-                  (str "/trip/")
-                  url-for)]
+  (let [href (str "/trip/" name)]
     [:li
      [:a.link {:href href} (h name)]]))
 
@@ -74,7 +72,7 @@
                      (map #(apply show-trip--group %) groups)]])]
     (layout {:main main :layout-class "layout--show"
              :extra-head show-trip--extra-head
-             :extra-body [:script {:src (url-for (:js-url @config))}]})))
+             :extra-body [:script {:src (:js-url @config)}]})))
 
 (defn- show-point--map-image
   [point]

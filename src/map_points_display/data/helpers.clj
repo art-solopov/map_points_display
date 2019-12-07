@@ -5,7 +5,7 @@
 (def schedule-line-re #"(?<dowfrom>\w+)(?:-(?<dowto>\w+))?\s+(?<timefrom>\d+(?::\d+)?)-(?<timeto>\d+(?::\d+)?)")
 
 (defn- parse-schedule-row
-  [row-match]
+  [^java.util.regex.Matcher row-match]
   (reduce (fn [m key]
             (merge m {(keyword key) (.group row-match key)}))
    {} ["dowfrom" "dowto" "timefrom" "timeto"]))

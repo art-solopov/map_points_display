@@ -4,7 +4,6 @@
             [compojure.route :as route]
             [ring.util.response :refer [resource-response]]
             [map-points-display.views :as views]
-            [map-points-display.views-bak :as views-b]
             [map-points-display.data :as data]))
 
 (defroutes app
