@@ -16,18 +16,25 @@
 
 (defn- postprocess-point
   [point]
-  (let [{:keys [coordinates]} point]
-    (-> point
-        (dissoc :coordinates)
-        (merge {:lat (.x coordinates) :lon (.y coordinates)}))))
+  (when-not (nil? point)
+    (let [{:keys [coordinates]} point]
+      (-> point
+          (dissoc :coordinates)
+          (merge {:lat (.x coordinates) :lon (.y coordinates)})))))
+
+(defn load-trip
+  [name]
+  (with-open [conn (jdbc/connection data-source)]
+    (-> conn
+        (jdbc/fetch ["SELECT * FROM trips WHERE name = ?" name])
+        first)))
 
 (defn load-trip-points
-  [table-name]
+  [trip-id]
   (with-open [conn (jdbc/connection data-source)]
     (let [q (str "SELECT points.* FROM points\n"
-                 "JOIN trips t on points.trip_id = t.id\n"
-                 "WHERE t.name = ?")
-          points (jdbc/fetch conn [q table-name])]
+                 "WHERE trip_id = ?")
+          points (jdbc/fetch conn [q trip-id])]
       (->> points
            (map postprocess-point)
            (group-by :type)))))
@@ -40,3 +47,9 @@
         first
         postprocess-point)))
 
+(defn load-user
+  [id]
+  (with-open [conn (jdbc/connection data-source)]
+    (-> conn
+        (jdbc/fetch ["SELECT * FROM users WHERE id = ?" id])
+        first)))

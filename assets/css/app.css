@@ -4,7 +4,8 @@
 @import "./show.css";
 @import "./show-poi.css";
 
-$footer-height: 8em;
+$nav-padding: 0.5em;
+$footer-height: 9.5em;
 
 body {
     font-size: 16px;
@@ -14,7 +15,7 @@ body {
 .layout {
     max-width: 1200px;
     margin: 0 auto;
-    min-height: calc(100vh - $footer-height);
+    min-height: calc(100vh - $footer-height - 2 * $nav-padding - 1.5em);
     box-sizing: border-box;
     padding: 1em;
 }
@@ -38,4 +39,27 @@ body {
 
     background: #EEE;
     color: #333;
+}
+
+nav.navbar {
+    box-sizing: border-box;
+    line-height: 1;
+
+    &, & > .navbar-left, & > .navbar-right {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    & > .navbar-right {
+        margin-left: auto;
+    }
+
+    & span, & a {
+        padding: $nav-padding;
+    }
+
+    & .navbar-brand {
+        font-size: 1.2rem;
+        font-variant: small-caps;
+    }
 }
