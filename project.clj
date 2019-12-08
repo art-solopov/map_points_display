@@ -16,6 +16,7 @@
                  [ragtime "0.8.0"]
                  [environ "1.1.0"]
                  [ring-logger "1.0.1"]
+                 [crypto-password "0.2.1"]
                  [org.clojure/tools.logging "0.4.1"]
                  [org.slf4j/slf4j-simple "1.7.29"]]
   :main ^:skip-aot map-points-display.core

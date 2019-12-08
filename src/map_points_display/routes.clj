@@ -6,7 +6,8 @@
             [clojure.tools.logging :as log]
             [ring.util.response :refer [resource-response]]
             [map-points-display.views :refer [->HiccupView]]
-            [map-points-display.data :as data]))
+            [map-points-display.data :as data]
+            [map-points-display.data.users :as users]))
 
 (def ^:private default-not-found
   (-> {:status 404 :body "Not found"} (rsp/content-type "text/plain")))
@@ -39,4 +40,13 @@
          (let [trips (data/trips-list)]
            (->HiccupView :trips-list {:trips trips}))
          (->HiccupView :welcome {})))
+  (GET "/login" []
+       (->HiccupView :login-form {}))
+  (POST "/login" {:keys [form-params]}
+        (let [username (form-params "username")
+              password (form-params "password")]
+          (if-let [user (users/authenticate username password)]
+            (-> (rsp/redirect "/")
+                (assoc :session {"user-id" (:id user)}))))
+        )
   (route/not-found "Not found"))

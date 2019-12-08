@@ -8,13 +8,15 @@
             [map-points-display.views.trips-list :as v-trips-list]
             [map-points-display.views.show-trip :as v-show-trip]
             [map-points-display.views.show-point :as v-show-point]
-            [map-points-display.views.welcome :as v-welcome])
+            [map-points-display.views.welcome :as v-welcome]
+            [map-points-display.views.auth :as v-auth])
   (:import (java.io StringReader)))
 
 (def views-by-name {:trips-list v-trips-list/render
                     :show-trip v-show-trip/render
                     :show-point v-show-point/render
-                    :welcome v-welcome/render})
+                    :welcome v-welcome/render
+                    :login-form v-auth/login-form})
 
 (defn- navbar
   [{:keys [user]}]

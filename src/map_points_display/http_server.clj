@@ -6,11 +6,13 @@
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
+            [ring.middleware.session.cookie :as session]
             [ring.middleware.session :refer [wrap-session]]
+            [ring.middleware.params :refer [wrap-params]]
             [ring.logger :as logger]
             [clojure.tools.logging :as log]
-            [map-points-display.config :refer [config]]
-            [map-points-display.data :refer [load-user]]
+            [map-points-display.config :refer [config secrets]]
+            [map-points-display.data.users :as users]
             [map-points-display.routes :as routes]))
 
 (defonce -server (atom nil))
@@ -21,15 +23,23 @@
     (let [response (handler request)]
       (header response "Referrer-Policy" "origin-when-cross-origin"))))
 
+(defn- get-session-user
+  [session]
+  (if-let [user-id (session "user-id")]
+    (users/load-by-id user-id)))
+
 (defn- wrap-user
   [handler]
-  (fn [request]
-    (handler (assoc request :user (load-user 1)))))
+  (fn [{:keys [session] :as request}]
+    (handler (->> session
+                  get-session-user
+                  (assoc request :user)))))
 
 (def handler
   (-> routes/app
       wrap-user
-      wrap-session
+      wrap-params
+      (wrap-session {:store (session/cookie-store {:key (:session-key @secrets)})})
       wrap-set-ref-header
       (wrap-resource "public")
       wrap-content-type
