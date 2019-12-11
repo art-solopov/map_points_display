@@ -1,6 +1,7 @@
-(ns map-points-display.views.show-trip
+(ns map-points-display.views.trip-details
   (:require [clojure.string :as s]
             [hiccup.element :refer [link-to]]
+            [hiccup.form :as form :refer [form-to]]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution]]
             [map-points-display.config :refer [config]]))
 
@@ -29,7 +30,7 @@
                   :integrity "sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
                   :crossorigin true}]))
 
-(defn render
+(defn show
   [{:keys [name groups]}]
   (let [main (list [:div#map.map {:data-map-url (map-tiles-base-url) :data-map-attribution map-tiles-attribution}
                     [:div#extra_attribution.extra-attribution]]
@@ -41,3 +42,17 @@
     {:main main :layout-class "layout--show"
      :extra-head show-trip--extra-head
      :extra-body [:script {:src (:js-url @config)}]}))
+
+(defn form
+  [{:keys [fields method url]}]
+  (let [main (list [:h1 "New trip"]
+                   (form-to [method url]
+                            [:div
+                             (form/label "name" "Name")
+                             (form/text-field {:required true} "name" (fields "name"))]
+                            [:div
+                             (form/label "country_code" "Country")
+                             (form/text-field {:minlength 2 :maxlength 2} "country_code" (fields "country"))]
+                            [:div
+                             (form/submit-button "Save")]))]
+    {:main main}))

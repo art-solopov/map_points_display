@@ -6,14 +6,15 @@
             [compojure.response :refer [render Renderable]]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
             [map-points-display.views.trips-list :as v-trips-list]
-            [map-points-display.views.show-trip :as v-show-trip]
+            [map-points-display.views.trip-details :as trip-details]
             [map-points-display.views.show-point :as v-show-point]
             [map-points-display.views.welcome :as v-welcome]
             [map-points-display.views.auth :as v-auth])
   (:import (java.io StringReader)))
 
 (def views-by-name {:trips-list v-trips-list/render
-                    :show-trip v-show-trip/render
+                    :show-trip trip-details/show
+                    :trip-form trip-details/form
                     :show-point v-show-point/render
                     :welcome v-welcome/render
                     :login-form v-auth/login-form})
@@ -55,3 +56,7 @@
           view-fragments (view-fn view-data)
           html (layout view-fragments request)]
       (render html request))))
+
+(defn hiccup-view
+  [^clojure.lang.Keyword view-name view-data]
+  (->HiccupView view-name view-data))

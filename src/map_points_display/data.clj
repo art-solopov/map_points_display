@@ -1,6 +1,5 @@
 (ns map-points-display.data
   (:require [clojure.string :as s]
-            [clojure.walk :refer [keywordize-keys]]
             [clojure.java.io :as io]
             [clojure.tools.logging :as log]
             [jdbc.core :as jdbc]
