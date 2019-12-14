@@ -8,7 +8,8 @@
             [map-points-display.views :refer [hiccup-view]]
             [map-points-display.data :as data]
             [map-points-display.data.users :as users]
-            [map-points-display.data.trips :as trips]))
+            [map-points-display.data.trips :as trips]
+            [map-points-display.data.points :as points]))
 
 (def ^:private default-not-found
   (-> {:status 404 :body "Not found"} (rsp/content-type "text/plain")))
@@ -21,6 +22,15 @@
           (let [groups (data/load-trip-points (:id trip))]
             (hiccup-view :show-trip {:groups groups :name trip-name}))
           default-not-found))
+   (GET "/trip/:trip-name/add-point" [trip-name :as r]
+        (if-let [trip (data/load-trip trip-name)]
+          (hiccup-view :point-form {:fields {} :method :post :url (:uri r) :trip-name trip-name})
+          default-not-found))
+   (POST "/trip/:trip-name/add-point" [trip-name :as r]
+         (if-let [trip (data/load-trip trip-name)]
+           (do
+             (points/create user (:id trip) (:form-params r))
+             (rsp/redirect (str "/trip/" trip-name)))))
    (GET "/new-trip" []
         (hiccup-view :trip-form {:fields {} :method :post :url "/new-trip"}))
    (POST "/new-trip" {:keys [form-params]}

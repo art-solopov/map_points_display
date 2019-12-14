@@ -45,14 +45,14 @@
 
 (defn form
   [{:keys [fields method url]}]
-  (let [main (list [:h1 "New trip"]
-                   (form-to [method url]
-                            [:div
-                             (form/label "name" "Name")
-                             (form/text-field {:required true} "name" (fields "name"))]
-                            [:div
-                             (form/label "country_code" "Country")
-                             (form/text-field {:minlength 2 :maxlength 2} "country_code" (fields "country"))]
-                            [:div
-                             (form/submit-button "Save")]))]
+  (let [form (form-to [method url]
+                      [:div
+                       (form/label "name" "Name")
+                       (form/text-field {:required true} "name" (fields "name"))]
+                      [:div
+                       (form/label "country_code" "Country")
+                       (form/text-field {:minlength 2 :maxlength 2} "country_code" (fields "country"))]
+                      [:div
+                       (form/submit-button "Save")])
+        main (list [:h1 "New trip"] form)]
     {:main main}))
