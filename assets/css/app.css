@@ -43,13 +43,31 @@ body {
     color: #333;
 }
 
+%flex {
+    display: flex;
+}
+
+.flex-row {
+    @extend %flex;
+    flex-flow: row nowrap;
+}
+
+.flex-column {
+    @extend %flex;
+    flex-flow: column nowrap;
+}
+
+.flex-shelf {
+    @extend %flex;
+    flex-flow: row wrap;
+}
+
 nav.navbar {
     box-sizing: border-box;
     line-height: 1;
 
     &, & > .navbar-left, & > .navbar-right {
-        display: flex;
-        flex-flow: row nowrap;
+        @extend .flex-row
     }
 
     & > .navbar-right {

@@ -28,10 +28,13 @@ function css() {
 }
 
 function js() {
-    let assets = src(['assets/js/**/*.js'])
+    let mapScripts = src(['assets/js/map/**/*.js', 'assets/js/map.js']).pipe(concat('map.js'))
+    let geoScripts = src(['assets/js/geocode.js'])
 
-    return assets.pipe(concat('app.js'))
-        .pipe(dest('resources/public/js'))
+
+    let assets = mergeStreams(mapScripts, geoScripts)
+
+    return assets.pipe(dest('resources/public/js'))
 }
 
 function watchAssets() {

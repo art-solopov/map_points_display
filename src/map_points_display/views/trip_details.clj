@@ -43,7 +43,7 @@
                      (map #(apply show-trip--group %) groups)]])]
     {:main main :layout-class "layout--show"
      :extra-head show-trip--extra-head
-     :extra-body [:script {:src (:js-url @config)}]}))
+     :extra-body [:script {:src "/js/map.js"}]}))
 
 (defn form
   [{:keys [fields method url]}]

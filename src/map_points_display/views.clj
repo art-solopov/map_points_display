@@ -39,6 +39,7 @@
           [:meta {:charset "UTF-8"}]
           [:title "Map points display"]
           [:link {:rel "stylesheet" :href "/css/app.css"}]
+          [:script {:src "https://unpkg.com/axios/dist/axios.min.js"}]
           extra-head
           ]
          [:body

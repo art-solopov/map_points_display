@@ -4,7 +4,8 @@
             [hiccup.form :refer [form-to] :as form]
             [map-points-display.data.points :as data]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
-            [map-points-display.data.helpers :refer [parse-schedule map-url]]))
+            [map-points-display.data.helpers :refer [parse-schedule map-url]]
+            [map-points-display.config :refer [config]]))
 
 (defn- show-point--map-image
   [point]
@@ -50,7 +51,7 @@
     {:main main}))
 
 (defn form
-  [{:keys [fields method url trip-name]}]
+  [{:keys [fields method url trip]}]
   (let [form (form-to [method url]
                       [:div
                        (form/label "name" "Name")
@@ -58,6 +59,13 @@
                       [:div
                        (form/label "address" "Address")
                        (form/text-area "address" (fields "address"))]
+                      [:div
+                       [:div [:button#btn_geocode {:type "button"
+                                                   :data-link "/api/geocode"
+                                                   :data-trip-id (:id trip)}
+                              "Geocode"]]
+                       [:div#geocode_results.flex-shelf]
+                       ]
                       [:div
                        (form/label "lat" "Latitude")
                        (form/text-field {:required true :pattern "\\d+\\.?\\d*"} "lat" (fields "lat"))]
@@ -75,5 +83,6 @@
                        (form/text-area "schedule" (fields "schedule"))]
                       [:div
                        (form/submit-button "Save")])]
-    {:main (list [:div (link-to {:class "link"} (str "/trip/" trip-name) "Back")]
-                 form)}))
+    {:main (list [:div (link-to {:class "link"} (str "/trip/" (:name trip)) "Back")]
+                 form)
+     :extra-body [:script {:src "/js/geocode.js"}]}))

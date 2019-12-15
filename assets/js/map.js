@@ -67,4 +67,4 @@ function main() {
     })
 }
 
-main();
+main()
