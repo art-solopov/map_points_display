@@ -35,7 +35,9 @@
   (let [main (list [:div#map.map {:data-map-url (map-tiles-base-url) :data-map-attribution map-tiles-attribution}
                     [:div#extra_attribution.extra-attribution]]
                    [:div#app.app
-                    (link-to {:class "link"} "/" "Back")
+                    [:div
+                     (link-to {:class "link"} "/" "Back")
+                     (link-to {:class "link"} (str "/trip/" name "/add-point") "Add point")]
                     [:h1 name]
                     [:article.places
                      (map #(apply show-trip--group %) groups)]])]

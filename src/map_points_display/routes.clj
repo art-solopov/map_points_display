@@ -14,23 +14,30 @@
 (def ^:private default-not-found
   (-> {:status 404 :body "Not found"} (rsp/content-type "text/plain")))
 
+(defn trip-routes
+  [user trip]
+  (routes
+   (GET "/" []
+        (let [groups (data/load-trip-points (:id trip))]
+          (hiccup-view :show-trip {:groups groups :name (:name trip)})))
+   (GET "/add-point" request
+        (hiccup-view :point-form {:fields {} :method :post :url (:uri request)
+                                  :trip-name (:name trip)}))
+   (POST "/add-point" request
+         (do
+           (points/create user (:id trip) (:form-params request))
+           (rsp/redirect (str "/trip/" (:name trip)))))
+   ))
+
+
 (defn user-protected
   [user]
   (routes
-   (GET "/trip/:trip-name" [trip-name]
-        (if-let [trip (data/load-trip trip-name)]
-          (let [groups (data/load-trip-points (:id trip))]
-            (hiccup-view :show-trip {:groups groups :name trip-name}))
-          default-not-found))
-   (GET "/trip/:trip-name/add-point" [trip-name :as r]
-        (if-let [trip (data/load-trip trip-name)]
-          (hiccup-view :point-form {:fields {} :method :post :url (:uri r) :trip-name trip-name})
-          default-not-found))
-   (POST "/trip/:trip-name/add-point" [trip-name :as r]
-         (if-let [trip (data/load-trip trip-name)]
-           (do
-             (points/create user (:id trip) (:form-params r))
-             (rsp/redirect (str "/trip/" trip-name)))))
+
+   (context "/trip/:trip-name" [trip-name]
+            (if-let [trip (data/load-trip trip-name)]
+              (trip-routes user trip)
+              default-not-found))
    (GET "/new-trip" []
         (hiccup-view :trip-form {:fields {} :method :post :url "/new-trip"}))
    (POST "/new-trip" {:keys [form-params]}
