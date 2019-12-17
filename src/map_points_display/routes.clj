@@ -7,8 +7,9 @@
             [clojure.tools.logging :as log]
             [ring.util.response :refer [resource-response]]
             [cheshire.core :as json]
-            [map-points-display.views :refer [hiccup-view]]
+            [map-points-display.views :refer [hiccup-view json-response]]
             [map-points-display.data :as data]
+            [map-points-display.data.geocode :as geo]
             [map-points-display.data.users :as users]
             [map-points-display.data.trips :as trips]
             [map-points-display.data.points :as points]))
@@ -32,10 +33,9 @@
 
 (defroutes api
   (POST "/geocode" {:keys [json-body]}
-        (-> {:status 200 :body (json/generate-string {:input json-body})}
-            (rsp/content-type "application/json"))
-        )
-  )
+        (let [trip-id (Long/parseLong (json-body "trip_id"))
+              search (json-body "search")]
+          (json-response (geo/geocode trip-id search)))))
 
 (defn user-required-wrap
   [handler]

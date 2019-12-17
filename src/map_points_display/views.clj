@@ -3,7 +3,9 @@
             [hiccup.core :refer [h]]
             [hiccup.page :refer [html5]]
             [hiccup.element :refer [link-to]]
+            [ring.util.response :as rsp]
             [compojure.response :refer [render Renderable]]
+            [cheshire.core :as json]
             [map-points-display.views.helpers :refer [map-tiles-base-url map-tiles-attribution acknowledgements normalize-timestr]]
             [map-points-display.views.trips-list :as v-trips-list]
             [map-points-display.views.trip-details :as trip-details]
@@ -62,3 +64,10 @@
 (defn hiccup-view
   [^clojure.lang.Keyword view-name view-data]
   (->HiccupView view-name view-data))
+
+(defn json-response
+  [data]
+  (-> data
+      json/generate-string
+      rsp/response
+      (rsp/content-type "application/json")))
