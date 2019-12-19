@@ -19,15 +19,17 @@
        (map parse-schedule-row)))
 
 (def ^:const mapbox-zoom-level 15.5)
-(def ^:const mapbox-img-size [400 380])
+(def ^:const mapbox-img-sizes
+  {:big [400 380]
+   :small [300 300]})
 
 ;; TODO: look into better string formatting
 (def mapbox-static-map-base-url
-  "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/$lon,$lat,$zoom,0,0/$widthx$height?access_token=$token")
+  "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-l($lon,$lat)/$lon,$lat,$zoom,0,0/$widthx$height?access_token=$token")
 
 (defn map-url
-  [{:keys [lat lon]}]
-  (let [[w h] mapbox-img-size
+  [{:keys [lat lon]} img-size]
+  (let [[w h] (mapbox-img-sizes img-size)
         token (:mapbox-api-key @secrets)]
     (-> mapbox-static-map-base-url
         (s/replace "$lon" (str lon))

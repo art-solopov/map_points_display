@@ -9,21 +9,24 @@
 (def uri "https://nominatim.openstreetmap.org/search")
 
 (defn- merge-with-name-address
-  [data]
-  (let [[name address] (split (:display_name data) #", " 2)]
-    (merge data {:name name :address address})))
+  [{:keys [namedetails display_name] :as data}]
+  (if-let [name (:name namedetails)]
+    (let [address (-> display_name (split #", " 2) last)]
+      (merge data {:name name :address address}))
+    (merge data {:name display_name :address display_name})))
 
 (defn- process-place
   [place-data]
   (-> place-data
-      (select-keys ["display_name" "lat" "lon" "place_id"])
       keywordize-keys
+      (select-keys [:display_name :lat :lon :place_id :namedetails])
       merge-with-name-address))
 
 (defn geocode [trip-id search]
   (let [country-code (get-country-code trip-id)
         response (http/get uri
                            {:query-params {:q search :countrycodes country-code
+                                           :namedetails 1
                                            :format "json"}
                             :user-agent "Mapptsbot/0.9"})
         {:keys [status body error]} @response]

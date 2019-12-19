@@ -5,6 +5,7 @@
 @import "./index.css";
 @import "./show.css";
 @import "./show-poi.css";
+@import "./poi-form.css";
 
 $nav-padding: 0.5em;
 $footer-height: 9.5em;

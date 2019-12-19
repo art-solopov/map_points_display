@@ -10,8 +10,7 @@
 (defn- show-point--map-image
   [point]
   [:aside.map-image-container
-   (image {:id "map_image" :class "map_image"} (map-url point))
-   (image {:id "map_marker" :class "marker"} (str "/icons/" (:type point) ".png"))])
+   (image {:id "map_image" :class "map_image"} (map-url point :big))])
 
 (defn- show-point--notes
   [notes]
@@ -64,7 +63,7 @@
                                                    :data-link "/api/geocode"
                                                    :data-trip-id (:id trip)}
                               "Geocode"]]
-                       [:div#geocode_results.flex-shelf]
+                       [:div#geocode_results.flex-shelf.geocode-results]
                        ]
                       [:div
                        (form/label "lat" "Latitude")
@@ -82,7 +81,16 @@
                        (form/label "schedule" "Schedule")
                        (form/text-area "schedule" (fields "schedule"))]
                       [:div
-                       (form/submit-button "Save")])]
+                       (form/submit-button "Save")])
+        gc-template [:template#geocode_result_template
+                     [:div.geocode-result
+                      [:div
+                       [:button {:type "button" :class "gc-save"} "Save"]]
+                      [:div.name ""]
+                      [:div.address ""]
+                       (image {:class "preview"} (map-url {:lat "$lat" :lon "$lon"} :small))
+                      ]]]
     {:main (list [:div (link-to {:class "link"} (str "/trip/" (:name trip)) "Back")]
                  form)
-     :extra-body [:script {:src "/js/geocode.js"}]}))
+     :extra-body (list gc-template
+                       [:script {:src "/js/geocode.js"}])}))
